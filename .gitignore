@@ -1,0 +1,15 @@
+/Library
+/Temp
+/obj
+/Logs
+*.sln
+*.csproj
+*.apk
+*.aab
+*.zip
+/xcode*
+.DS_Store
+SuperfineExample/Temp
+SuperfineExample/Library
+SuperfineExample/Logs
+SuperfineExample/obj
