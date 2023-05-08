@@ -1,0 +1,6 @@
+framework module SuperfineTracking {
+  umbrella header "SuperfineTracking.h"
+
+  export *
+  module * { export * }
+}
