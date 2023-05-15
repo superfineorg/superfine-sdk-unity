@@ -14,7 +14,12 @@ namespace Superfine.Tracking
         private static TrackingManager _instance = null;
 
         //Tenjin API KEY
-        private string tenjinAPIKey = "YOUR TENJIN API KEY";
+#if UNITY_IPHONE
+        private string tenjinAPIKey = "TENJIN API KEY FOR IOS";
+#else
+        private string tenjinAPIKey = "TENJIN API KEY FOR ANDROID";
+#endif
+        
         private bool hasConnectTenjin = false;
 
         public static TrackingManager GetInstance()

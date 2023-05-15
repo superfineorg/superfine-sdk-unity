@@ -40,7 +40,11 @@ Go to **Superfine/Tracking/Script/TrackingManager.cs** and update the Tenjin API
 
 ```groovy
 //Tenjin API KEY
-private string tenjinAPIKey = "YOUR TENJIN API KEY";
+#if UNITY_IOS
+    private string tenjinAPIKey = "YOUR TENJIN API KEY IOS";
+#else
+    private string tenjinAPIKey = "YOUR TENJIN API KEY ANDROID";
+#endif
 ```
 # 2 Send Events
 ## 2.1 Wallet Events
