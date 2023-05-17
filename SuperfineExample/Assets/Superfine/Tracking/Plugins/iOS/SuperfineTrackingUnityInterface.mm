@@ -152,6 +152,12 @@
     return [SuperfineTrackingUnityUtility makeStringReturn:[SuperfineTrackingManager version]];
 }
 
+- (char *)getUserId
+{
+    if (![self assertInited]) return [SuperfineTrackingUnityUtility makeStringReturn:@""];
+    return [SuperfineTrackingUnityUtility makeStringReturn:[[SuperfineTrackingManager sharedTrackingManager] getUserId]];
+}
+
 - (void)setConfigId:(const char*)configId
 {
     if (![self assertInited]) return;
@@ -356,6 +362,11 @@ extern "C"
     void SuperfineTrackingSetUserId(const char* userId)
     {
         [[SuperfineTrackingUnityInterface sharedInstance] setUserId:userId];
+    }
+    
+    char* SuperfineTrackingGetUserId()
+    {
+        return [[SuperfineTrackingUnityInterface sharedInstance] getUserId];
     }
 
     void SuperfineTrackingTrack(const char* eventName)

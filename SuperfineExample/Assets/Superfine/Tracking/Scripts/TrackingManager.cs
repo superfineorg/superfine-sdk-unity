@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace Superfine.Tracking
 {
     public class TrackingManager :
@@ -19,8 +21,9 @@ namespace Superfine.Tracking
 #else
         private string tenjinAPIKey = "TENJIN API KEY FOR ANDROID";
 #endif
-        
+
         private bool hasConnectTenjin = false;
+        private bool hasUpdateCustomerID = false;
 
         public static TrackingManager GetInstance()
         {
@@ -40,6 +43,19 @@ namespace Superfine.Tracking
                 _instance.hasConnectTenjin = true;
 
                 _instance.ConnectTenjin();
+            }
+
+            try
+            {
+                string spid = TrackingManager.GetInstance().GetUserId();
+                if (_instance.getTenjinInstance() != null && !string.IsNullOrEmpty(spid))
+                {
+                    _instance.getTenjinInstance().SetCustomerUserId(spid);
+                }
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogWarning("SUPERFINE exception" + e.Message);
             }
 
             return _instance;

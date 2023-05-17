@@ -61,6 +61,14 @@ namespace Superfine.Tracking
         }
 
         [DllImport("__Internal")]
+        private static extern string SuperfineTrackingGetUserId();
+
+        public override string GetUserId()
+        {
+            return SuperfineTrackingGetUserId();
+        }
+
+        [DllImport("__Internal")]
         private static extern void SuperfineTrackingTrack(string eventName);
         [DllImport("__Internal")]
         private static extern void SuperfineTrackingTrackWithValue(string eventName, string value);

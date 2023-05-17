@@ -2,14 +2,15 @@
 {
     public abstract class TrackingManagerBase
     {
-        protected TrackingManagerBase(string appId, string appSecret, TrackingManagerInitOptions options = null) {}
+        protected TrackingManagerBase(string appId, string appSecret, TrackingManagerInitOptions options = null) { }
 
         public abstract string GetVersion();
 
-        public virtual void Execute(string eventName, object param = null) {}
+        public virtual void Execute(string eventName, object param = null) { }
 
         public abstract void SetConfigId(string configId);
         public abstract void SetUserId(string userId);
+        public abstract string GetUserId();
 
         public abstract void Track(string eventName, TrackBaseData data = null);
 

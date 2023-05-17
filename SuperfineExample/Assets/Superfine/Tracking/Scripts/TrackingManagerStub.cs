@@ -26,6 +26,10 @@ namespace Superfine.Tracking
         {
             Debug.Log(string.Format("Set User Id: {0}", userId));
         }
+        public override string GetUserId()
+        {
+            return "USREID";
+        }
 
         public override void Track(string eventName, TrackBaseData data = null)
         {

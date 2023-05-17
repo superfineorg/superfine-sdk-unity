@@ -63,6 +63,10 @@ namespace Superfine.Tracking
         {
             javaClass.CallStatic("SetUserId", userId);
         }
+        public override string GetUserId()
+        {
+            return javaClass.CallStatic<string>("GetUserId");
+        }
 
         public override void Track(string eventName, TrackBaseData data = null)
         {
