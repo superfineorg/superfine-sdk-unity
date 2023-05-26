@@ -16,11 +16,7 @@ namespace Superfine.Tracking
         private static TrackingManager _instance = null;
 
         //Tenjin API KEY
-#if UNITY_IPHONE
-        private string tenjinAPIKey = "TENJIN API KEY FOR IOS";
-#else
-        private string tenjinAPIKey = "TENJIN API KEY FOR ANDROID";
-#endif
+        private string tenjinAPIKey = string.Empty;
 
         private bool hasConnectTenjin = false;
         private bool hasUpdateCustomerID = false;
@@ -37,28 +33,35 @@ namespace Superfine.Tracking
                 _instance = new TrackingManager(appId, appSecret, options);
             }
 
-            //Check if connect tenjin
-            if (!_instance.hasConnectTenjin)
-            {
-                _instance.hasConnectTenjin = true;
-
-                _instance.ConnectTenjin();
-            }
-
-            try
-            {
-                string spid = TrackingManager.GetInstance().GetUserId();
-                if (_instance.getTenjinInstance() != null && !string.IsNullOrEmpty(spid))
-                {
-                    _instance.getTenjinInstance().SetCustomerUserId(spid);
-                }
-            }
-            catch (System.Exception e)
-            {
-                Debug.LogWarning("SUPERFINE exception" + e.Message);
-            }
-
             return _instance;
+        }
+
+        public void ConnectTenjin(string tenjinKey)
+        {
+            if (!string.IsNullOrEmpty(tenjinKey))
+            {
+                tenjinAPIKey = tenjinKey;
+                //Check if connect tenjin
+                if (!_instance.hasConnectTenjin)
+                {
+                    _instance.hasConnectTenjin = true;
+
+                    _instance.ConnectTenjin();
+                }
+                try
+                {
+                    string spid = TrackingManager.GetInstance().GetUserId();
+                    if (_instance.getTenjinInstance() != null && !string.IsNullOrEmpty(spid))
+                    {
+                        _instance.getTenjinInstance().SetCustomerUserId(spid);
+                    }
+                }
+                catch (System.Exception e)
+                {
+                    Debug.LogWarning("SUPERFINE exception" + e.Message);
+                }
+
+            }
         }
 
         public BaseTenjin getTenjinInstance()

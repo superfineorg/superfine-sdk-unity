@@ -12,7 +12,7 @@ using System.IO;
 using System.Collections.Generic;
 using UnityEngine.TextCore;
 
-public class PostProcess
+public class SuperfinePostProcess
 {
     //Check Skads
     [PostProcessBuild(700)]

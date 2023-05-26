@@ -13,6 +13,13 @@ public class SampleScene : MonoBehaviour
     public string levelName;
     public string testWalletAddress;
 
+    //Tenjin API KEY
+#if UNITY_IPHONE
+    private string tenjinAPIKey = "TENJIN API KEY FOR IOS";
+#else
+    private string tenjinAPIKey = "TENJIN API KEY FOR ANDROID";
+#endif
+
     void Awake()
     {
         TrackingManagerInitOptions options = new TrackingManagerInitOptions();
@@ -26,6 +33,7 @@ public class SampleScene : MonoBehaviour
 #endif
 
         TrackingManager.CreateInstance(appId, appSecret, options);
+        TrackingManager.GetInstance().ConnectTenjin(tenjinAPIKey);
     }
 
     public void TestBoot()
