@@ -386,7 +386,7 @@ extern "C"
 
     void SuperfineTrackingTrackBootEnd()
     {
-        [[SuperfineTrackingUnityInterface sharedInstance] trackBootStart];
+        [[SuperfineTrackingUnityInterface sharedInstance] trackBootEnd];
     }
 
     void SuperfineTrackingTrackLevelStart(int levelId, const char* name)
