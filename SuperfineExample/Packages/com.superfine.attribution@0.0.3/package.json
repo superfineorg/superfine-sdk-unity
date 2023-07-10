@@ -1,0 +1,21 @@
+{
+  "name": "com.superfine.attribution",
+  "displayName": "Superfine Attribution SDK",
+  "version": "0.0.3",
+  "unity": "2019.1",
+  "dependencies": {
+    "com.unity.nuget.newtonsoft-json": "3.2.1",
+    "com.google.external-dependency-manager": "1.2.176"
+  },
+  "description": "Superfine Attribution SDK is the library that adds support for Superfine Attribution in Unity",
+  "author": {
+    "name": "Superfine",
+    "email": "https://superfine.org/"
+  },
+  "keywords": [
+    "Superfine",
+    "Attribution",
+    "Tracking",
+    "SDK"
+  ]
+}

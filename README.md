@@ -1,22 +1,23 @@
 # Superfine SDK Unity
-Version 0.0.1
+Version 0.0.3
 # 1 Setup
 ## 1.1 Import Unity package
-Add the Unity package into the project.
+Download the SuperfineSDK zip file, unzip it, and copy the extracted files to your Packages folder.
 
-\* This SDK requires JSON.NET to work. If you don’t have that in the project, please import it by adding this line in Packages/manifest.json file
-
+\* The SDK requires JSON.NET and external-dependency-manager to function properly. We have included them within the SDK, but you have the flexibility to remove or modify them to match the version requirements of your application from the file: **Packages/com.superfine.attribution/package.json**
 ```groovy
-"com.unity.nuget.newtonsoft-json": "2.0.2"
+"com.unity.nuget.newtonsoft-json": "3.2.1",
+"com.google.external-dependency-manager": "1.2.176"
 ```
 ## 1.2 Get App Information
-Go to the project section on superfine.org, select the project, and copy the **Project ID** and **Superfine App Secret**.
+Go to the project section on the Superfine.org dashboard, select the project, and copy the **Project ID** and **Superfine App Secret**
 
+## 1.3 Update Superfine Setting
+From the menu pick **Superfine/Edit Settings**
+Update your **Project ID**, **Superfine App Secret**, TenjinApiKey for **iOS** and **Android**
 
-## 1.3 Initialize SDK
+## 1.4 Initialize SDK
 Add code to initialize the SDK (could be placed in the Awake function of a new component).
-
-Fill in the **Project ID** and **Superfine App Secret** obtained from the previous step:
 
 ```groovy
 void Awake()
@@ -31,20 +32,17 @@ void Awake()
     options.captureInAppPurchases = true;
 #endif
 #endif
-// Replace project_id, superfine_app_secret with the Project ID and Superfine App Secret from the previous step 
-    TrackingManager.CreateInstance(project_id, superfine_app_secret, options);
+    TrackingManager.CreateInstance(options);
 }
 ```
-## 1.4 Updating the Tenjin API key
-Go to **Superfine/Tracking/Script/TrackingManager.cs** and update the Tenjin API key as follows:
-
+You can disable the automatic startup of the SDK from the configuration.
 ```groovy
-//Tenjin API KEY
-#if UNITY_IOS
-    private string tenjinAPIKey = "YOUR TENJIN API KEY IOS";
-#else
-    private string tenjinAPIKey = "YOUR TENJIN API KEY ANDROID";
-#endif
+// Set autoStart to false
+options.autoStart = false;
+```
+And then you can start it whenever you like.
+```groovy
+TrackingManager.GetInstance().Start();
 ```
 # 2 Send Events
 ## 2.1 Wallet Events
@@ -57,7 +55,7 @@ TrackingManager.GetInstance().TrackWalletLink(wallet_address, "ronin");
 Call this event when you want to unlink the user wallet address:
 
 ```groovy
-TrackingManager.GetInstance().TrackAccountUnlink(wallet_address, "ronin");
+TrackingManager.GetInstance().TrackWalletUnlink(wallet_address, "ronin");
 ```
 ## 2.2 Game Level Events
 Call this event when starting a level:
@@ -156,4 +154,3 @@ Call this to send the custom event with the custom data
 ```groovy
 TrackingManager.GetInstance().Track(string event_name, TrackBaseData data = null)
 ```
-

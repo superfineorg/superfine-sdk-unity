@@ -1,7 +1,31 @@
 {
   "dependencies": {
+    "com.google.external-dependency-manager": {
+      "version": "file:com.google.external-dependency-manager@1.2.176",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
+    "com.superfine.attribution": {
+      "version": "file:com.superfine.attribution@0.0.3",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {
+        "com.unity.nuget.newtonsoft-json": "3.2.1",
+        "com.google.external-dependency-manager": "1.2.176"
+      }
+    },
+    "com.unity.ai.navigation": {
+      "version": "1.1.4",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.modules.ai": "1.0.0"
+      },
+      "url": "https://packages.unity.com"
+    },
     "com.unity.collab-proxy": {
-      "version": "2.0.4",
+      "version": "2.0.5",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
@@ -36,7 +60,7 @@
       }
     },
     "com.unity.ide.rider": {
-      "version": "3.0.21",
+      "version": "3.0.24",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -61,7 +85,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.nuget.newtonsoft-json": {
-      "version": "3.2.0",
+      "version": "3.2.1",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
@@ -79,6 +103,22 @@
       "depth": 2,
       "source": "registry",
       "dependencies": {},
+      "url": "https://packages.unity.com"
+    },
+    "com.unity.sysroot": {
+      "version": "2.0.6",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://packages.unity.com"
+    },
+    "com.unity.sysroot.linux-x86_64": {
+      "version": "2.0.5",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.sysroot": "2.0.6"
+      },
       "url": "https://packages.unity.com"
     },
     "com.unity.test-framework": {
@@ -112,7 +152,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.timeline": {
-      "version": "1.6.5",
+      "version": "1.7.4",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -120,6 +160,16 @@
         "com.unity.modules.animation": "1.0.0",
         "com.unity.modules.audio": "1.0.0",
         "com.unity.modules.particlesystem": "1.0.0"
+      },
+      "url": "https://packages.unity.com"
+    },
+    "com.unity.toolchain.win-x86_64-linux-x86_64": {
+      "version": "2.0.5",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.sysroot": "2.0.6",
+        "com.unity.sysroot.linux-x86_64": "2.0.5"
       },
       "url": "https://packages.unity.com"
     },
