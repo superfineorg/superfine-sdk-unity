@@ -3,6 +3,8 @@
 
 #define JSON_DICT NSDictionary<NSString *, id> *
 
+typedef void (^TrackingAuthorizationCompletion)(NSUInteger status);
+
 typedef NS_ENUM(NSInteger, SuperfineTrackingAuthorizationTrackingStatus) {
     SuperfineTrackingAuthorizationTrackingStatus_NotDetermined = 0,
     SuperfineTrackingAuthorizationTrackingStatus_Restricted = 1,

@@ -3,6 +3,7 @@ using System.Runtime.InteropServices;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using UnityEngine;
+using AOT;
 
 namespace Superfine.Tracking.Unity
 {
@@ -321,6 +322,54 @@ namespace Superfine.Tracking.Unity
         public override void TrackCryptoPayment(string pack, float price, int amount, string currency = "ETH", string chain = "ethereum")
         {
             SuperfineTrackingTrackCryptoPayment(pack, price, amount, currency == null ? "ETH" : currency, chain == null ? "ethereum" : chain);
+        }
+
+        private delegate void _RequestAuthorizationTrackingCompleteNativeHandler(int status);
+
+        [DllImport("__Internal")]
+        private static extern int SuperfineTrackingRequestTrackingAuthorization(_RequestAuthorizationTrackingCompleteNativeHandler callback);
+
+        private static RequestAuthorizationTrackingCompleteHandler _requestAuthorizationTrackingCompleteCallback = null;
+
+        [MonoPInvokeCallback(typeof(_RequestAuthorizationTrackingCompleteNativeHandler))]
+        public static void AppTransparencyTrackingRequestCompleted(int status)
+        {
+            _requestAuthorizationTrackingCompleteCallback?.Invoke((AuthorizationTrackingStatus)status);
+            _requestAuthorizationTrackingCompleteCallback = null;
+        }
+
+        public override void RequestTrackingAuthorization(RequestAuthorizationTrackingCompleteHandler callback = null)
+        {
+            _requestAuthorizationTrackingCompleteCallback = callback;
+            SuperfineTrackingRequestTrackingAuthorization(AppTransparencyTrackingRequestCompleted);
+        }
+
+        [DllImport("__Internal")]
+        private static extern int SuperfineTrackingGetTrackingAuthorizationStatus();
+        public override AuthorizationTrackingStatus GetTrackingAuthorizationStatus()
+        {
+            return (AuthorizationTrackingStatus)SuperfineTrackingGetTrackingAuthorizationStatus();
+        }
+
+        [DllImport("__Internal")]
+        private static extern void SuperfineTrackingUpdatePostbackConversionValue(int conversionValue);
+        public override void UpdatePostbackConversionValue(int conversionValue)
+        {
+            SuperfineTrackingUpdatePostbackConversionValue(conversionValue);
+        }
+
+        [DllImport("__Internal")]
+        private static extern void SuperfineTrackingUpdatePostbackConversionValue2(int conversionValue, string coarseValue);
+        public override void UpdatePostbackConversionValue(int conversionValue, string coarseValue)
+        {
+            SuperfineTrackingUpdatePostbackConversionValue2(conversionValue, coarseValue);
+        }
+
+        [DllImport("__Internal")]
+        private static extern void SuperfineTrackingUpdatePostbackConversionValue3(int conversionValue, string coarseValue, bool lockWindow);
+        public override void UpdatePostbackConversionValue(int conversionValue, string coarseValue, bool lockWindow)
+        {
+            SuperfineTrackingUpdatePostbackConversionValue3(conversionValue, coarseValue, lockWindow);
         }
     }
 }

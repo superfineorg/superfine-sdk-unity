@@ -181,6 +181,16 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)trackCryptoPayment_pack:(NSString* _Nonnull)pack price:(float)price amount:(NSUInteger)amount currency:(NSString* _Nonnull)currency;
 - (void)trackCryptoPayment_pack:(NSString* _Nonnull)pack price:(float)price amount:(NSUInteger)amount currency:(NSString* _Nonnull)currency chain:(NSString* _Nonnull)chain;
 
+- (void)requestTrackingAuthorization:(TrackingAuthorizationCompletion)completion;
+- (NSUInteger)getTrackingAuthorizationStatus;
+
+- (void)updatePostbackConversionValue:(NSInteger)conversionValue;
+- (void)updatePostbackConversionValue:(NSInteger)conversionValue
+                          coarseValue:(NSString*)coarseValue;
+- (void)updatePostbackConversionValue:(NSInteger)conversionValue
+                          coarseValue:(NSString*)coarseValue
+                           lockWindow:(BOOL)lockWindow;
+
 @end
 
 NS_ASSUME_NONNULL_END

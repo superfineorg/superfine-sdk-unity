@@ -63,6 +63,14 @@ void SuperfineTrackingTrackAccountUnlink(const char* accountId, const char* type
 void SuperfineTrackingTrackWalletLink(const char* wallet, const char* type);
 void SuperfineTrackingTrackWalletUnlink(const char* wallet, const char* type);
 void SuperfineTrackingTrackCryptoPayment(const char* pack, float price, int amount, const char* currency, const char* chain);
+
+void SuperfineTrackingRequestTrackingAuthorization(void (*callback)(int));
+int SuperfineTrackingGetTrackingAuthorizationStatus();
+
+void SuperfineTrackingUpdatePostbackConversionValue(int conversionValue);
+void SuperfineTrackingUpdatePostbackConversionValue2(int conversionValue, const char* coarseValue);
+void SuperfineTrackingUpdatePostbackConversionValue3(int conversionValue, const char* coarseValue, bool lockWindow);
+
 #ifdef __cplusplus
 }
 #endif

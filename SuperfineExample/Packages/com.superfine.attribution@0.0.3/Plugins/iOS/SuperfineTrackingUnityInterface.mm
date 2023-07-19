@@ -452,6 +452,36 @@
     [[SuperfineTrackingManager sharedTrackingManager] trackCryptoPayment_pack:[SuperfineTrackingUnityUtility stringFromCString:pack] price:price amount:amount currency:[SuperfineTrackingUnityUtility stringFromCString:currency] chain:[SuperfineTrackingUnityUtility stringFromCString:chain]];
 }
 
+- (void)requestTrackingAuthorization:(void(*)(int))callback
+{
+    id handler = ^(NSUInteger result)
+    {
+        callback((int)result);
+    };
+    
+    [[SuperfineTrackingManager sharedTrackingManager] requestTrackingAuthorization:handler];
+}
+
+- (int)getTrackingAuthorizationStatus
+{
+    return (int)[[SuperfineTrackingManager sharedTrackingManager] getTrackingAuthorizationStatus];
+}
+
+- (void)updatePostbackConversionValue:(int)conversionValue
+{
+    [[SuperfineTrackingManager sharedTrackingManager] updatePostbackConversionValue:conversionValue];
+}
+
+- (void)updatePostbackConversionValue:(int)conversionValue coarseValue:(const char*) coarseValue
+{
+    [[SuperfineTrackingManager sharedTrackingManager] updatePostbackConversionValue:conversionValue coarseValue:[SuperfineTrackingUnityUtility stringFromCString:coarseValue]];
+}
+
+- (void)updatePostbackConversionValue:(int)conversionValue coarseValue:(const char*) coarseValue lockWindow:(bool)lockWindow
+{
+    [[SuperfineTrackingManager sharedTrackingManager] updatePostbackConversionValue:conversionValue coarseValue:[SuperfineTrackingUnityUtility stringFromCString:coarseValue] lockWindow:lockWindow];
+}
+
 @end
 
 #pragma mark - Actual Unity C# interface (extern C)
@@ -646,6 +676,31 @@ extern "C"
     void SuperfineTrackingTrackCryptoPayment(const char* pack, float price, int amount, const char* currency, const char* chain)
     {
         [[SuperfineTrackingUnityInterface sharedInstance] trackCryptoPayment_pack:pack price:price amount:amount currency:currency chain:chain];
+    }
+
+    void SuperfineTrackingRequestTrackingAuthorization(void (*callback)(int))
+    {
+        [[SuperfineTrackingUnityInterface sharedInstance] requestTrackingAuthorization:callback];
+    }
+
+    int SuperfineTrackingGetTrackingAuthorizationStatus()
+    {
+        return [[SuperfineTrackingUnityInterface sharedInstance] getTrackingAuthorizationStatus];
+    }
+
+    void SuperfineTrackingUpdatePostbackConversionValue(int conversionValue)
+    {
+        [[SuperfineTrackingUnityInterface sharedInstance] updatePostbackConversionValue:conversionValue];
+    }
+
+    void SuperfineTrackingUpdatePostbackConversionValue2(int conversionValue, const char* coarseValue)
+    {
+        [[SuperfineTrackingUnityInterface sharedInstance] updatePostbackConversionValue:conversionValue coarseValue:coarseValue];
+    }
+
+    void SuperfineTrackingUpdatePostbackConversionValue3(int conversionValue, const char* coarseValue, bool lockWindow)
+    {
+        [[SuperfineTrackingUnityInterface sharedInstance] updatePostbackConversionValue:conversionValue coarseValue:coarseValue lockWindow:lockWindow];
     }
 }
 

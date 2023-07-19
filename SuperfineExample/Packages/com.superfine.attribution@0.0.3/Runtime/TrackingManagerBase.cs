@@ -1,4 +1,6 @@
-﻿namespace Superfine.Tracking.Unity
+﻿using UnityEngine.UIElements;
+
+namespace Superfine.Tracking.Unity
 {
     public abstract class TrackingManagerBase
     {
@@ -36,7 +38,7 @@
         public abstract void TrackIAPBuyStart(string pack, float price, int amount, string currency);
         public abstract void TrackIAPBuyEnd(string pack, float price, int amount, string currency, bool isSuccess);
 
-        public virtual void TrackAppleIAPBuyEnd(string pack, float price, int amount, string currency, string transactionId, string receipt,  bool isSuccess)
+        public virtual void TrackAppleIAPBuyEnd(string pack, float price, int amount, string currency, string transactionId, string receipt, bool isSuccess)
         {
             TrackIAPBuyEnd(pack, price, amount, currency, isSuccess);
         }
@@ -63,5 +65,33 @@
         public abstract void TrackWalletUnlink(string wallet, string type = "ethereum");
 
         public abstract void TrackCryptoPayment(string pack, float price, int amount, string currency = "ETH", string chain = "ethereum");
+
+        public delegate void RequestAuthorizationTrackingCompleteHandler(AuthorizationTrackingStatus status);
+        //iOS only
+        public virtual void RequestTrackingAuthorization(RequestAuthorizationTrackingCompleteHandler callback = null)
+        {
+            callback?.Invoke(AuthorizationTrackingStatus.NOT_DETERMINED);
+        }
+
+        //iOS only
+        public virtual AuthorizationTrackingStatus GetTrackingAuthorizationStatus()
+        {
+            return AuthorizationTrackingStatus.NOT_DETERMINED;
+        }
+
+        //iOS only
+        public virtual void UpdatePostbackConversionValue(int conversionValue)
+        {
+        }
+
+        //iOS only
+        public virtual void UpdatePostbackConversionValue(int conversionValue, string coarseValue)
+        {
+        }
+
+        //iOS only
+        public virtual void UpdatePostbackConversionValue(int conversionValue, string coarseValue, bool lockWindow)
+        {
+        }
     }
 }

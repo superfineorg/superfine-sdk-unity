@@ -37,6 +37,7 @@ public class SuperfinePostProcess
             PlistElementDict rootDict = plist.root;
 
             rootDict.SetString("NSUserTrackingUsageDescription", "We use your data to serve you more relevant ads and improve your experience.");
+            rootDict.SetString("NSAdvertisingAttributionReportEndpoint", "https://superfine.gg");
 
             List<string> skadPathList = new List<string>();
 
