@@ -7,15 +7,11 @@ using UnityEditor;
 
 public class SuperfineSettings : ScriptableObject
 {
-    [HideInInspector]
     public string appId = "YOUR APP ID";
-    [HideInInspector]
     public string appSecret = "YOUR APP SECRET";
 
     //Tenjin key
-    [HideInInspector]
     public string tenjinAPIKeyIOS = "TENJIN API KEY FOR IOS";
-    [HideInInspector]
     public string tenjinAPIKeyAndroid = "TENJIN API KEY FOR ANDROID";
 
     private const string SuperfineSettingsAssetName = "SuperfineSettings";

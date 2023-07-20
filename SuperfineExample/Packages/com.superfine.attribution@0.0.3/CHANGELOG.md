@@ -1,4 +1,4 @@
-## [0.0.3] - 2023-07-06
+## [0.0.3] - 2023-07-19
 
 ### Added
 
@@ -10,6 +10,13 @@
 - Added support for Linux i686, running on 32-bit x86 processors, compatible with older hardware.
 - Added support for Linux x86 x64, running on 64-bit x86 processors, supporting modern 64-bit hardware.
 - Added a setting dashboard.
+- Added support for UpdatePostbackConversionValue constants:
+  - UpdatePostbackConversionValue(int conversionValue, string coarseValue, bool lockWindow);
+  - UpdatePostbackConversionValue(int conversionValue);
+  - UpdatePostbackConversionValue(int conversionValue, string coarseValue).
+- Added support for RequestTrackingAuthorization to check ATT status callback.
+- Updated SKAD list.
+- Added Stop Tracking method.
 
 ### Changed
 
