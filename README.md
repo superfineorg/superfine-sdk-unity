@@ -44,33 +44,37 @@ And then you can start it whenever you like.
 ```groovy
 TrackingManager.GetInstance().Start();
 ```
+You can stop tracking by calling this function:
+```groovy
+TrackingManager.GetInstance().Stop();
+```
 # 2 Send Events
 ## 2.1 Wallet Events
-Call this event when you want to link the user wallet address:
+Call this function when you want to link the user wallet address:
 
 ```groovy
 TrackingManager.GetInstance().TrackWalletLink(wallet_address, "ronin");
 ```
 
-Call this event when you want to unlink the user wallet address:
+Call this function when you want to unlink the user wallet address:
 
 ```groovy
 TrackingManager.GetInstance().TrackWalletUnlink(wallet_address, "ronin");
 ```
 ## 2.2 Game Level Events
-Call this event when starting a level:
+Call this function when starting a level:
 
 ```groovy
 TrackingManager.GetInstance().TrackLevelStart(level_id, level_name);
 ```
 
-Call this event when completing a level:
+Call this function when completing a level:
 
 ```groovy
 TrackingManager.GetInstance().TrackLevelEnd(level_id, level_name, true);
 ```
 
-Call this event when failing a level:
+Call this function when failing a level:
 
 ```groovy
 TrackingManager.GetInstance().TrackLevelEnd(level_id, level_name, false);
@@ -78,24 +82,24 @@ TrackingManager.GetInstance().TrackLevelEnd(level_id, level_name, false);
 ## 2.3 Ads Events
 These events are used to track ads from your app. You can use the Superfine dashboard later to check ad performance based on these events.
 
-Call this event when an ad placement is loaded:
+Call this function when an ad placement is loaded:
 ```groovy
 TrackingManager.GetInstance().TrackAdLoad(ad_unit, ad_placement_type, ad_placement); 
 ```
 
-Call this event when an ad is closed:
+Call this function when an ad is closed:
 
 ```groovy
 TrackingManager.GetInstance().TrackAdClose(ad_unit, ad_placement_type, ad_placement); 
 ```
 
-Call this event when the user clicks on an ad:
+Call this function when the user clicks on an ad:
 
 ```groovy
 TrackingManager.GetInstance().TrackAdClick(ad_unit, ad_placement_type, ad_placement); 
 ```
 
-Call this event when an ad is displayed:
+Call this function when an ad is displayed:
 
 ```groovy
 TrackingManager.GetInstance().TrackAdImpression(ad_unit, ad_placement_type, ad_placement); 
@@ -104,19 +108,19 @@ TrackingManager.GetInstance().TrackAdImpression(ad_unit, ad_placement_type, ad_p
 ## 2.4 IAP Events 
 These events are used to track in-app purchases from your app.
 
-Call this event when the user attempts to buy an IAP item:
+Call this function when the user attempts to buy an IAP item:
 
 ```groovy
 TrackingManager.GetInstance().TrackIAPBuyStart(pack_id, price, amount, currency);
 ```
 
-Call this event when the IAP purchase process is completed:
+Call this function when the IAP purchase process is completed:
 
 ```groovy
 TrackingManager.GetInstance().TrackIAPBuyEnd(pack_id, price, amount, currency);
 ```
 
-Call this event when restoring a purchase:
+Call this function when restoring a purchase:
 
 ```groovy
 TrackingManager.GetInstance().TrackIAPRestorePurchase(); 
@@ -153,4 +157,21 @@ Call this to send the custom event with the custom data
 
 ```groovy
 TrackingManager.GetInstance().Track(string event_name, TrackBaseData data = null)
+```
+## 2.6 Postback Conversion Value for iOS
+The method allows you to update both the conversion value and coarse conversion values, and it provides the option to send the postback before the conversion window ends. Additionally, it allows you to specify a completion handler to handle situations where the update fails.
+```groovy
+using Superfine.Tracking.Unity;
+
+// Assuming you have the TrackingManager instance obtained from your SDK
+TrackingManager trackingManager = TrackingManager.GetInstance();
+
+// Example 1: Basic usage without coarseValue or lockWindow
+trackingManager.UpdatePostbackConversionValue(10);
+
+// Example 2: Usage with coarseValue
+trackingManager.UpdatePostbackConversionValue(8, "low");
+
+// Example 3: Usage with lockWindow
+trackingManager.UpdatePostbackConversionValue(15, "medium", true);
 ```
