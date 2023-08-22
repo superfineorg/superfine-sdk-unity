@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dependencies>
+	<androidPackages>
+		<androidPackage spec="com.android.support:support-annotations:+" />
+		<androidPackage spec="com.google.android.gms:play-services-appset:16.0.2" />
+		<androidPackage spec="com.google.android.gms:play-services-ads-identifier:18.0.1" />
+ 		<androidPackage spec="com.tenjin:android-sdk:1.12.21" />
+		<androidPackage spec="com.android.installreferrer:installreferrer:2.2" />
+	</androidPackages>
+    <iosPods>
+        <iosPod name="TenjinSDK" version="~> 1.12.26" />
+    </iosPods>
+</dependencies>

@@ -1,13 +1,17 @@
 using System.Collections;
 using UnityEngine;
-using Superfine.Tracking.Unity;
-using TMPro;
 using UnityEngine.UI;
+using TMPro;
+
+using Superfine.Unity;
 
 public class SampleScene : MonoBehaviour
 {
     public int levelId;
     public string levelName;
+
+    public string configId;
+    public string customUserId;
 
     public string testWalletAddress;
     public string testWalletType = "ethereum";
@@ -26,40 +30,92 @@ public class SampleScene : MonoBehaviour
 
     public string testCryptoPackId;
 
+    public string testAdNetworkId;
+
     public TextMeshProUGUI userIdText;
     public Toggle autoStartToggle;
 
     public GameObject startButtonObject;
+    public GameObject stopButtonObject;
+
+    public GameObject testButtonPanel;
+    public GameObject testAllButtonObject;
 
     void Awake()
     {
-        TrackingManagerInitOptions options = new TrackingManagerInitOptions();
+        SuperfineSDKInitOptions options = new SuperfineSDKInitOptions();
+        options.autoStart = false;
+
+        options.configId = configId;
+        options.customUserId = customUserId;
 
 #if !UNITY_EDITOR
 #if UNITY_ANDROID
         options.logLevel = LogLevel.VERBOSE;
 #elif UNITY_IOS
-        options.debug = false;
+        options.debug = true;
 #elif UNITY_STANDALONE
+        options.logLevel = LogLevel.VERBOSE;
+        options.registerURIScheme = true;
+
         //options.proxy = "127.0.0.1:8888";
-        //options.caPath = "FiddlerRoot.pem";
+        //options.sslVerify = false;
 #endif
 #endif
 
-        TrackingManager.CreateInstance(options);
+        SuperfineSDK.CreateInstance(options);
 
-        userIdText.text = TrackingManager.GetInstance().GetUserId();
+        userIdText.text = SuperfineSDK.GetUserId();
         autoStartToggle.isOn = options.autoStart;
 
-        startButtonObject.SetActive(!options.autoStart);
+        bool autoStart = options.autoStart;
+        startButtonObject.SetActive(!autoStart);
+        stopButtonObject.SetActive(autoStart);
     }
 
     public void TestStart()
     {
-        TrackingManager.GetInstance().Start();
-        userIdText.text = TrackingManager.GetInstance().GetUserId();
+        if (Application.platform == RuntimePlatform.IPhonePlayer)
+        {
+            SuperfineSDK.RequestTrackingAuthorization((AuthorizationTrackingStatus status) =>
+            {
+                Debug.Log("Authorization Tracking Status = " + status.ToString());
+
+                SuperfineSDK.UpdatePostbackConversionValue(10, "medium", true);
+
+                StartTracking();
+            });
+        }
+        else
+        {
+            StartTracking();
+        }
+    }
+
+    public void TestStop()
+    {
+        SuperfineSDK.Stop();
+
+        stopButtonObject.SetActive(false);
+
+        testButtonPanel.SetActive(false);
+        testAllButtonObject.SetActive(false);
+    }
+
+    private void PrintEvent(string eventName, string eventData)
+    {
+        Debug.LogError("SEND EVENT: " + eventName + " " + eventData);
+    }
+
+    private void StartTracking()
+    {
+        SuperfineSDK.Start();
+        userIdText.text = SuperfineSDK.GetUserId();
+
+        SuperfineSDK.AddSendEventCallback(PrintEvent);
 
         startButtonObject.SetActive(false);
+        stopButtonObject.SetActive(true);
     }
 
     public void TestBoot()
@@ -69,75 +125,84 @@ public class SampleScene : MonoBehaviour
 
     private IEnumerator TestBootCoroutine()
     {
-        TrackingManager.GetInstance().TrackBootStart();
+        SuperfineSDK.LogBootStart();
         yield return new WaitForSecondsRealtime(3.0f);
-        TrackingManager.GetInstance().TrackBootEnd();
+        SuperfineSDK.LogBootEnd();
     }
 
     public void TestLinkWallet()
     {
-        TrackingManager.GetInstance().TrackWalletLink(testWalletAddress, testWalletType);
+        SuperfineSDK.LogWalletLink(testWalletAddress, testWalletType);
     }
 
     public void TestUnlinkWallet()
     {
-        TrackingManager.GetInstance().TrackWalletUnlink(testWalletAddress, testWalletType);
+        SuperfineSDK.LogWalletUnlink(testWalletAddress, testWalletType);
     }
 
     public void TestLevelStart()
     {
-        TrackingManager.GetInstance().TrackLevelStart(levelId, levelName);
+        SuperfineSDK.LogLevelStart(levelId, levelName);
     }
 
     public void TestLevelCompleted()
     {
-        TrackingManager.GetInstance().TrackLevelEnd(levelId, levelName, true);
+        SuperfineSDK.LogLevelEnd(levelId, levelName, true);
     }
 
     public void TestLevelFailed()
     {
-        TrackingManager.GetInstance().TrackLevelEnd(levelId, levelName, false);
+        SuperfineSDK.LogLevelEnd(levelId, levelName, false);
     }
 
     public void TestAdImpression()
     {
-        TrackingManager.GetInstance().TrackAdImpression(testAdUnit, testAdPlacementType, testAdPlacement);
+        SuperfineSDK.LogAdImpression(testAdUnit, testAdPlacementType, testAdPlacement);
     }
 
     public void TestAll()
     {
-        TrackingManager.GetInstance().TrackBootStart();
-        TrackingManager.GetInstance().TrackBootEnd();
+        SuperfineSDK.LogBootStart();
+        SuperfineSDK.LogBootEnd();
 
-        TrackingManager.GetInstance().TrackLevelStart(levelId, levelName);
-        TrackingManager.GetInstance().TrackLevelEnd(levelId, levelName, true);
-        TrackingManager.GetInstance().TrackLevelEnd(levelId, levelName, false);
+        SuperfineSDK.LogLevelStart(levelId, levelName);
+        SuperfineSDK.LogLevelEnd(levelId, levelName, true);
+        SuperfineSDK.LogLevelEnd(levelId, levelName, false);
 
-        TrackingManager.GetInstance().TrackAdLoad(testAdUnit, testAdPlacementType, testAdPlacement);
-        TrackingManager.GetInstance().TrackAdImpression(testAdUnit, testAdPlacementType, testAdPlacement);
-        TrackingManager.GetInstance().TrackAdClick(testAdUnit, testAdPlacementType, testAdPlacement);
-        TrackingManager.GetInstance().TrackAdClose(testAdUnit, testAdPlacementType, testAdPlacement);
+        SuperfineSDK.LogAdLoad(testAdUnit, testAdPlacementType, testAdPlacement);
+        SuperfineSDK.LogAdImpression(testAdUnit, testAdPlacementType, testAdPlacement);
+        SuperfineSDK.LogAdClick(testAdUnit, testAdPlacementType, testAdPlacement);
+        SuperfineSDK.LogAdClose(testAdUnit, testAdPlacementType, testAdPlacement);
 
-        TrackingManager.GetInstance().TrackIAPInitialization(true);
-        TrackingManager.GetInstance().TrackIAPRestorePurchase();
-        TrackingManager.GetInstance().TrackIAPBuyStart(testIAPPackId, 1.0f, 1, "USD");
-        TrackingManager.GetInstance().TrackIAPBuyEnd(testIAPPackId, 1.0f, 1, "USD", true);
+        SuperfineSDK.SetConfigId(configId);
+        SuperfineSDK.SetCustomUserId(customUserId);
 
-        TrackingManager.GetInstance().TrackFacebookLogin(testFacebookId);
-        TrackingManager.GetInstance().TrackFacebookLogout(testFacebookId);
+        SuperfineSDK.LogIAPInitialization(true);
+        SuperfineSDK.LogIAPRestorePurchase();
+        SuperfineSDK.LogIAPBuyStart(testIAPPackId, 1.0, 1, "USD");
+        SuperfineSDK.LogIAPBuyEnd(testIAPPackId, 1.0, 1, "USD", true);
 
-        TrackingManager.GetInstance().TrackUpdateGame("2.0.0");
-        TrackingManager.GetInstance().TrackRateGame();
-        TrackingManager.GetInstance().TrackAuthorizationTrackingStatus(AuthorizationTrackingStatus.AUTHORIZED);
+        SuperfineSDK.LogFacebookLogin(testFacebookId);
+        SuperfineSDK.LogFacebookLogout(testFacebookId);
 
-        TrackingManager.GetInstance().TrackAccountLogin(testAccountId, testAccountType);
-        TrackingManager.GetInstance().TrackAccountLogout(testAccountId, testAccountType);
-        TrackingManager.GetInstance().TrackAccountLink(testFacebookId, "facebook");
-        TrackingManager.GetInstance().TrackAccountUnlink(testFacebookId, "facebook");
+        SuperfineSDK.LogUpdateGame("2.0.0");
+        SuperfineSDK.LogRateGame();
 
-        TrackingManager.GetInstance().TrackWalletLink(testWalletAddress, testWalletType);
-        TrackingManager.GetInstance().TrackWalletUnlink(testWalletAddress, testWalletType);
+        SuperfineSDK.LogAccountLogin(testAccountId, testAccountType);
+        SuperfineSDK.LogAccountLogout(testAccountId, testAccountType);
+        SuperfineSDK.LogAccountLink(testFacebookId, "facebook");
+        SuperfineSDK.LogAccountUnlink(testFacebookId, "facebook");
 
-        TrackingManager.GetInstance().TrackCryptoPayment(testCryptoPackId, 0.01f, 1, "ETH", "ethereum");
+        SuperfineSDK.LogWalletLink(testWalletAddress, testWalletType);
+        SuperfineSDK.LogWalletUnlink(testWalletAddress, testWalletType);
+
+        SuperfineSDK.LogCryptoPayment(testCryptoPackId, 0.01, 1, "ETH", "ethereum");
+
+        SuperfineSDK.LogAdRevenue(testAdNetworkId, 1.0, "USD", "DIRECT", new Superfine.Unity.SimpleJSON.JSONObject
+        {
+            { "param1", "abc" },
+            { "param2", 100 },
+            { "param3", true }
+        });
     }
 }

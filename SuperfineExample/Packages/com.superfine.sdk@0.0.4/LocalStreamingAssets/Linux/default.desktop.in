@@ -1,0 +1,9 @@
+[Desktop Entry]
+Encoding=UTF-8
+Version=${VERSION}
+Name=${NAME}
+TryExec=${EXEC_NAME}
+Exec=${EXEC_PATH} %F
+Terminal=false
+Type=Application
+MimeType=${URI_SCHEME}
