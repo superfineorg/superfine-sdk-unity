@@ -160,6 +160,22 @@ public class SampleScene : MonoBehaviour
         SuperfineSDK.LogAdImpression(testAdUnit, testAdPlacementType, testAdPlacement);
     }
 
+    public void TestPrivacy()
+    {
+        SuperfineSDKThirdPartySharingSettings settings = new SuperfineSDKThirdPartySharingSettings();
+        settings.AddValue("facebook", "data_processing_options_country", "1");
+        settings.AddValue("facebook", "data_processing_options_state", "1000");
+        settings.AddFlag("facebook", "install", true);
+        settings.AddFlag("facebook", "events", false);
+        settings.AddFlag("facebook", "sessions", false);
+        SuperfineSDK.LogThirdPartySharingSettings(settings);
+
+        SuperfineSDK.DisableThirdPartySharing();
+        SuperfineSDK.EnableThirdPartySharing();
+
+        SuperfineSDK.GdprForgetMe();
+    }
+
     public void TestAll()
     {
         SuperfineSDK.LogBootStart();
@@ -179,8 +195,13 @@ public class SampleScene : MonoBehaviour
 
         SuperfineSDK.LogIAPInitialization(true);
         SuperfineSDK.LogIAPRestorePurchase();
-        SuperfineSDK.LogIAPBuyStart(testIAPPackId, 1.0, 1, "USD");
-        SuperfineSDK.LogIAPBuyEnd(testIAPPackId, 1.0, 1, "USD", true);
+
+        SuperfineSDK.LogIosIAPBuy(testIAPPackId, 1.0, 1, "USD", "transaction_id", "receipt");
+        SuperfineSDK.LogAndroidIAPBuy(testIAPPackId, 1.0, 1, "USD", "data", "signature");
+
+        SuperfineSDK.LogIAPResult(testIAPPackId, 1.0, 1, "USD", true);
+
+        SuperfineSDK.LogLocation(1.0, 2.0);
 
         SuperfineSDK.LogFacebookLogin(testFacebookId);
         SuperfineSDK.LogFacebookLogout(testFacebookId);

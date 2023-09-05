@@ -1,0 +1,6 @@
+framework module SuperfineSDK {
+  umbrella header "SuperfineSDK.h"
+
+  export *
+  module * { export * }
+}

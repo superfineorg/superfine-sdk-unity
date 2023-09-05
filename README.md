@@ -1,5 +1,4 @@
 # Superfine SDK Unity
-Version 0.0.4
 # 1 Setup
 ## 1.1 Import Unity package
 Download the SuperfineSDK zip file, unzip it, and copy the extracted files to your Packages folder.
@@ -51,16 +50,11 @@ void Awake()
 - debug (**Boolean**): for iOS only. If set to true, will display the debug log
 - captureInAppPurchases (**Boolean**): for iOS only. Enable capturing in-app purchases for iOS
 
-You can disable auto-start with the following line of code:
-```groovy
-options.autoStart = false; 
-```
-
 And then you can start it whenever you like.
 ```groovy
 SuperfineSDK.Start();
 ```
-If you wish to halt the logging process, simply use this function:
+You can stop tracking by calling this function:
 ```groovy
 SuperfineSDK.Stop();
 ```
@@ -219,15 +213,15 @@ Call this method when the user attempts to buy an IAP item.
 | `pack`         | **String**: Can’t be null. The unique identifier of the purchased item or pack.|
 | `price`        | **Float**: Can’t be null. The price of the item or pack. |
 | `amount`       | **Integer**: Can’t be null. The quantity of the purchased item or pack.  |
-| `currency`    | **String**: Can’t be null. The currency code (e.g., "USD", "EUR") for the price. |
+| `mediation`    | **String**: Can’t be null. The currency code (e.g., "USD", "EUR") for the price. |
 
 *Example:*
 ```groovy
 //Log when the user attempts to purchase a package with ID "test_pack" for 0.99 USD, getting 150 units.
 SuperfineSDK.LogIAPBuyStart("test_pack", 0.99, 150, "USD"); 
 ```
-### LogIAPResult
-**`void LogIAPResult(string pack, float price, int amount, string currency);`**
+### LogIAPBuyEnd
+**`void LogIAPBuyEnd(string pack, float price, int amount, string currency);`**
 
 Call this method when the user attempts to buy an IAP item.
 | Parameters       |                   |
@@ -235,12 +229,12 @@ Call this method when the user attempts to buy an IAP item.
 | `pack`         | **String**: Can’t be null. The unique identifier of the purchased item or pack.|
 | `price`        | **Float**: Can’t be null. The price of the item or pack. |
 | `amount`       | **Integer**: Can’t be null. The quantity of the purchased item or pack.  |
-| `currency`    | **String**: Can’t be null. The currency code (e.g., "USD", "EUR") for the price. |
+| `mediation`    | **String**: Can’t be null. The currency code (e.g., "USD", "EUR") for the price. |
 
 *Example:*
 ```groovy
 //Log when the user completed to purchase a package with ID "test_pack" for 0.99 USD, getting 150 units.
-SuperfineSDK.LogIAPResult("test_pack", 0.99, 150, "USD");
+SuperfineSDK.LogIAPBuyEnd("test_pack", 0.99, 150, "USD");
 ```
 ### LogAPRestorePurchase
 **`void LogAPRestorePurchase();`**
@@ -300,17 +294,17 @@ SuperfineSDK.Log("My_Custom_Event_Name", eventData);
 ### Ads reporting helper class
 We offer ad revenue reporting support through our addon classes. Automatically receive detailed reports by implementing the appropriate class based on your chosen mediation platform and registering for events. Currently, we provide support for the following mediations: Max Mediation (AppLovin), IronSource Mediation, and Google AdMob Mediation.
 
-#### Applovin Addon Helper Class
-- **Integration**: From the menu pick: **Superfine/Copy AppLovin Addon**.
+#### Applovin Addons Helper Class
+- **Integration**: Add the AppLovin Helper Addons to your project by going to the **Superfine** > **Copy AppLovin Addon**.
 - **Event Registration**: Begin logging revenue and impressions by calling `SuperfineSDKApplovin.RegisterPaidEvent()`. When you're done, turn it off with `SuperfineSDKApplovin.UnregisterPaidEvent()` or when your manager class is destroyed.
 
-#### IronSource Addon Helper Class
-- **Integration**: From the menu pick: **Superfine/Copy IronSource Addon**.
+#### IronSource Addons Helper Class
+- **Integration**: Add the Ironsource Helper Addons to your project by going to the **Superfine** > **Copy IronSource Addon**.
 - **Event Registration**: Begin logging revenue and impressions with `SuperfineSDKIronSource.RegisterPaidEvent()`. Turn it off with `SuperfineSDKIronSource.UnregisterPaidEvent()` when done or when your manager class is removed.
 
 #### Google AdMob Addon Helper Class
-- **Integration**: From the menu pick: **Superfine/Copy Admob Addon**.
-- **Event Registration**: For Google Admob you have to register events for all placement that you have.
+- **Integration**: Add the Admob Helper Addons to your project by going to the **Superfine** > **Copy Admob Addon**.
+-**Event Registration**: For Google Admob you have to register events for all placement that you have.
     - For Banner: `SuperfineSDKAdMob.RegisterBannerViewPaidEvent(bannerView, adUnitId)` and `SuperfineSDKAdMob.UnregisterBannerViewPaidEvent(bannerView, adUnitId)`.
     - For Interstitial: `SuperfineSDKAdMob.RegisterInterstitialAdPaidEvent(interstitialAd, adUnitId)` and `SuperfineSDKAdMob.UnregisterInterstitialAdPaidEvent(interstitialAd, adUnitId)`.
     - For Rewarded video ad:  `SuperfineSDKAdMob.RegisterRewardedAdPaidEvent(rewardedAd, adUnitId)` and `SuperfineSDKAdMob.UnregisterRewardedAdPaidEvent(rewardedAd, adUnitId)`.
@@ -320,7 +314,7 @@ We offer ad revenue reporting support through our addon classes. Automatically r
 
 ### Facebook Events Helper Class
 The SuperfineSDKFacebook class simplifies sending events to Facebook for marketing purposes. To smoothly integrate this feature, follow these steps:
-- **Integration**: From the menu pick: **Superfine/Copy Facebook Addon**.
+- **Integration**: Add the Facebook Addon by copying it from the Superfine menu.
 - **Event Registration**: Begin logging events with `SuperfineSDKFacebook.RegisterSendEvent()`. When done, turn it off using `SuperfineSDKFacebook.UnregisterSendEvent()` or when your manager class is removed.
 
 By following these instructions, you can effectively utilize the SuperfineSDKFacebook class to transmit custom events to Facebook, enhancing marketing insights and decision-making for your app.
@@ -328,7 +322,7 @@ By following these instructions, you can effectively utilize the SuperfineSDKFac
 ## 2.7 Postback Conversion Value for iOS
 The method allows you to update both the conversion value and coarse conversion values, and it provides the option to send the postback before the conversion window ends. Additionally, it allows you to specify a completion handler to handle situations where the update fails.
 ```groovy
-using Superfine.Unity;
+using Superfine.Tracking.Unity;
 
 // Example 1: Basic usage without coarseValue or lockWindow
 SuperfineSDK.UpdatePostbackConversionValue(10);
