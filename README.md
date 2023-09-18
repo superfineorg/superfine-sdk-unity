@@ -13,7 +13,7 @@ Go to the project section on the Superfine.org dashboard, select the project, an
 
 ## 1.3 Update Superfine Setting
 From the menu pick **Superfine/Edit Settings**
-Update your **Project ID**, **Superfine App Secret**, TenjinApiKey for **iOS** and **Android**
+Update your **Project ID**, **Superfine App Secret**
 
 ## 1.4 Initialize SDK
 Add code to initialize the SDK (could be placed in the Awake function of a new component).
