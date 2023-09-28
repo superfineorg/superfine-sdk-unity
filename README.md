@@ -204,8 +204,8 @@ SuperfineSDK.LogAdRevenue(testAdNetworkId, 1.0, "USD", "DIRECT", new Superfine.U
 ```
 ## 2.4 IAP Events 
 These events are used to track in-app purchases from your app.
-### LogIAPBuyStart
-**`void LogIAPBuyStart(string pack, float price, int amount, string currency);`**
+### LogIAPResult
+**`void LogIAPResult(string pack, float price, int amount, bool isSuccess);`**
 
 Call this method when the user attempts to buy an IAP item.
 | Parameters       |                   |
@@ -213,23 +213,7 @@ Call this method when the user attempts to buy an IAP item.
 | `pack`         | **String**: Can’t be null. The unique identifier of the purchased item or pack.|
 | `price`        | **Float**: Can’t be null. The price of the item or pack. |
 | `amount`       | **Integer**: Can’t be null. The quantity of the purchased item or pack.  |
-| `mediation`    | **String**: Can’t be null. The currency code (e.g., "USD", "EUR") for the price. |
-
-*Example:*
-```groovy
-//Log when the user attempts to purchase a package with ID "test_pack" for 0.99 USD, getting 150 units.
-SuperfineSDK.LogIAPBuyStart("test_pack", 0.99, 150, "USD"); 
-```
-### LogIAPBuyEnd
-**`void LogIAPBuyEnd(string pack, float price, int amount, string currency);`**
-
-Call this method when the user attempts to buy an IAP item.
-| Parameters       |                   |
-|-----------------|---------------     |
-| `pack`         | **String**: Can’t be null. The unique identifier of the purchased item or pack.|
-| `price`        | **Float**: Can’t be null. The price of the item or pack. |
-| `amount`       | **Integer**: Can’t be null. The quantity of the purchased item or pack.  |
-| `mediation`    | **String**: Can’t be null. The currency code (e.g., "USD", "EUR") for the price. |
+| `isSuccess`    | **Boolean**: Can’t be null. True if the purchase was successful. False if the purchase failed. |
 
 *Example:*
 ```groovy
