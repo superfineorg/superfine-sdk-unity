@@ -30,8 +30,6 @@ void Awake()
 #elif UNITY_IOS
     // Enable debug mode for iOS
     options.debug = true; 
-    // Enable capturing in-app purchases for iOS
-    options.captureInAppPurchases = true;
 #endif
 #endif
        // Create an instance of SuperfineSDK
@@ -50,18 +48,22 @@ void Awake()
 - debug (**Boolean**): for iOS only. If set to true, will display the debug log
 - captureInAppPurchases (**Boolean**): for iOS only. Enable capturing in-app purchases for iOS
 
-And then you can start it whenever you like.
+You can start it whenever you like if you set autoStart = false
 ```groovy
+options.autoStart = false;
+SuperfineSDK.CreateInstance(options);
+
+//Start SuperfineSDK when you want to
 SuperfineSDK.Start();
 ```
-You can stop tracking by calling this function:
+You can stop SuperfineSDK by calling this function:
 ```groovy
 SuperfineSDK.Stop();
 ```
 # 2 Send Events
 ## 2.1 Wallet Events
 ### LogWalletLink
-**`void LogkWalletLink(const String wallet, const String type = "ethereum");`**
+**`void LogWalletLink(const String wallet, const String type = "ethereum");`**
 
 Call this method when you want to link the user's wallet address.
 | Parameters       |                   |
@@ -121,14 +123,14 @@ SuperfineSDK.LogLevelEnd(10, "level_10", true);
 ## 2.3 Ads Events
 These events are used to track ads from your app. You can use the Superfine dashboard later to check ad performance based on these events.
 ### LogAdLoad
-**`void LogAdLoad(const String adUnit, EAdPlacementType adPlacementType, EAdPlacement adPlacement = EAdPlacement::UNKNOWN);`**
+**`void LogAdLoad(const String adUnit, AdPlacementType adPlacementType, AdPlacement adPlacement = AdPlacement::UNKNOWN);`**
 
 Call this method when an ad placement is loaded.
 | Parameters       |                   |
 |-----------------|---------------     |
 | `adUnit`         | **String**: Can’t be null. The ad unit that you want to log.|
-| `adPlacementType` | **enum EAdPlacementType**: Can’t be null. Can be:<br>- BANNER = 0<br>- INTERSTITIAL = 1<br>- REWARDED_VIDEO = 2<br>- adPlacement<br>|
-|`adPlacement`      |**enum EAdPlacement**: Can’t be null. Can be:<br>- UNKNOWN = -1<br>- BOTTOM = 0<br>- TOP = 1<br>- LEFT = 2<br>- RIGHT = 3<br>- FULL_SCREEN = 4 |
+| `adPlacementType` | **enum AdPlacementType**: Can’t be null. Can be:<br>- BANNER = 0<br>- INTERSTITIAL = 1<br>- REWARDED_VIDEO = 2<br>- adPlacement<br>|
+|`adPlacement`      |**enum AdPlacement**: Can’t be null. Can be:<br>- UNKNOWN = -1<br>- BOTTOM = 0<br>- TOP = 1<br>- LEFT = 2<br>- RIGHT = 3<br>- FULL_SCREEN = 4 |
 
 *Example:*
 ```groovy
@@ -142,8 +144,8 @@ Call this method when an ad is closed.
 | Parameters       |                   |
 |-----------------|---------------     |
 | `adUnit`         | **String**: Can’t be null. The ad unit that you want to log.|
-| `adPlacementType` | **enum EAdPlacementType**: Can’t be null. Can be:<br>- BANNER = 0<br>- INTERSTITIAL = 1<br>- REWARDED_VIDEO = 2<br>- adPlacement<br>|
-|`adPlacement`      |**enum EAdPlacement**: Can’t be null. Can be:<br>- UNKNOWN = -1<br>- BOTTOM = 0<br>- TOP = 1<br>- LEFT = 2<br>- RIGHT = 3<br>- FULL_SCREEN = 4 |
+| `adPlacementType` | **enum AdPlacementType**: Can’t be null. Can be:<br>- BANNER = 0<br>- INTERSTITIAL = 1<br>- REWARDED_VIDEO = 2<br>- adPlacement<br>|
+|`adPlacement`      |**enum AdPlacement**: Can’t be null. Can be:<br>- UNKNOWN = -1<br>- BOTTOM = 0<br>- TOP = 1<br>- LEFT = 2<br>- RIGHT = 3<br>- FULL_SCREEN = 4 |
 
 *Example:*
 ```groovy
@@ -157,8 +159,8 @@ Call this method when the ad impression is displayed.
 | Parameters       |                   |
 |-----------------|---------------     |
 | `adUnit`         | **String**: Can’t be null. The ad unit that you want to log.|
-| `adPlacementType` | **enum EAdPlacementType**: Can’t be null. Can be:<br>- BANNER = 0<br>- INTERSTITIAL = 1<br>- REWARDED_VIDEO = 2<br>- adPlacement<br>|
-|`adPlacement`      |**enum EAdPlacement**: Can’t be null. Can be:<br>- UNKNOWN = -1<br>- BOTTOM = 0<br>- TOP = 1<br>- LEFT = 2<br>- RIGHT = 3<br>- FULL_SCREEN = 4 |
+| `adPlacementType` | **enum AdPlacementType**: Can’t be null. Can be:<br>- BANNER = 0<br>- INTERSTITIAL = 1<br>- REWARDED_VIDEO = 2<br>- adPlacement<br>|
+|`adPlacement`      |**enum AdPlacement**: Can’t be null. Can be:<br>- UNKNOWN = -1<br>- BOTTOM = 0<br>- TOP = 1<br>- LEFT = 2<br>- RIGHT = 3<br>- FULL_SCREEN = 4 |
 
 *Example:*
 ```groovy
@@ -172,8 +174,8 @@ Call this method when the user clicks on an ad.
 | Parameters       |                   |
 |-----------------|---------------     |
 | `adUnit`         | **String**: Can’t be null. The ad unit that you want to log.|
-| `adPlacementType` | **enum EAdPlacementType**: Can’t be null. Can be:<br>- BANNER = 0<br>- INTERSTITIAL = 1<br>- REWARDED_VIDEO = 2<br>- adPlacement<br>|
-|`adPlacement`      |**enum EAdPlacement**: Can’t be null. Can be:<br>- UNKNOWN = -1<br>- BOTTOM = 0<br>- TOP = 1<br>- LEFT = 2<br>- RIGHT = 3<br>- FULL_SCREEN = 4 |
+| `adPlacementType` | **enum AdPlacementType**: Can’t be null. Can be:<br>- BANNER = 0<br>- INTERSTITIAL = 1<br>- REWARDED_VIDEO = 2<br>- adPlacement<br>|
+|`adPlacement`      |**enum AdPlacement**: Can’t be null. Can be:<br>- UNKNOWN = -1<br>- BOTTOM = 0<br>- TOP = 1<br>- LEFT = 2<br>- RIGHT = 3<br>- FULL_SCREEN = 4 |
 
 *Example:*
 ```groovy
