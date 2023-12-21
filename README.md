@@ -278,6 +278,27 @@ SuperfineSDK.Log("My_Custom_Event_Name", eventData);
 ```
 
 ## 2.6 Addons
+
+### Unity IAP helper class
+The SuperfineSDKUnityIAP class simplifies the process of sending In-App Purchase (IAP) receipt events. Ensure you are using the **Unity IAP** package for this functionality.
+- **Integration** Add the Uinity IAP Helper Addons to your project by going to the **Superfine** > **Copy UnityIAP Addon**.
+- **Sending Event**: Call `Superfine.Unity.SuperfineSDKUnityIAP.LogIAPReceipt(Product p)` when a purchase is successfully completed using the Unity IAP plugin.
+*Example:*
+```groovy
+// Callback function for successful purchase
+private void ProcessProductFinal(Product p, string receipt = null)
+    {
+        // Implement your logic here
+
+        // Log the first purchase event
+        Superfine.Unity.SuperfineSDK.LogIAPResult(p.definition.id, (double)(p.metadata.localizedPrice), 1, p.metadata.isoCurrencyCode, true);
+
+        // Use Unity IAP helper to send the receipt event for LTV calculation of renewing purchases
+        Superfine.Unity.SuperfineSDKUnityIAP.LogIAPReceipt(p);
+    }
+```
+
+
 ### Ads reporting helper class
 We offer ad revenue reporting support through our addon classes. Automatically receive detailed reports by implementing the appropriate class based on your chosen mediation platform and registering for events. Currently, we provide support for the following mediations: Max Mediation (AppLovin), IronSource Mediation, and Google AdMob Mediation.
 
