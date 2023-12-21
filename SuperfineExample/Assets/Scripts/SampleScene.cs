@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using TMPro;
 
 using Superfine.Unity;
+using Superfine.Unity.SimpleJSON;
 
 public class SampleScene : MonoBehaviour
 {
@@ -22,6 +23,16 @@ public class SampleScene : MonoBehaviour
     public AdPlacement testAdPlacement = AdPlacement.UNKNOWN;
 
     public string testIAPPackId;
+
+    public string testIAPReceipt;
+    public string testIAPData;
+    public string testIAPSignature;
+    public string testIAPReceiptId;
+    public string testIAPStore;
+    public string testIAPTransactionId;
+    public string testIAPUserId;
+    public string testIAPPayload;
+    public string testIAPToken;
 
     public string testFacebookId;
 
@@ -60,6 +71,9 @@ public class SampleScene : MonoBehaviour
 
         //options.proxy = "127.0.0.1:8888";
         //options.sslVerify = false;
+
+        //options.steamBuild = true;
+        //options.steamAppId = 480;
 #endif
 #endif
 
@@ -196,18 +210,27 @@ public class SampleScene : MonoBehaviour
         SuperfineSDK.LogIAPInitialization(true);
         SuperfineSDK.LogIAPRestorePurchase();
 
-        SuperfineSDK.LogIosIAPBuy(testIAPPackId, 1.0, 1, "USD", "transaction_id", "receipt");
-        SuperfineSDK.LogAndroidIAPBuy(testIAPPackId, 1.0, 1, "USD", "data", "signature");
-
         SuperfineSDK.LogIAPResult(testIAPPackId, 1.0, 1, "USD", true);
+
+        SuperfineSDK.LogIAPReceipt_Apple(testIAPReceipt);
+        SuperfineSDK.LogIAPReceipt_Google(testIAPData, testIAPSignature);
+        SuperfineSDK.LogIAPReceipt_Amazon(testIAPUserId, testIAPReceiptId);
+        SuperfineSDK.LogIAPReceipt_Roku(testIAPTransactionId);
+        SuperfineSDK.LogIAPReceipt_Windows(testIAPReceipt);
+        SuperfineSDK.LogIAPReceipt_Facebook(testIAPReceipt);
+        SuperfineSDK.LogIAPReceipt_Unity(testIAPReceipt);
+        SuperfineSDK.LogIAPReceipt_AppStoreServer(testIAPTransactionId);
+        SuperfineSDK.LogIAPReceipt_GooglePlayProduct(testIAPPackId, testIAPToken);
+        SuperfineSDK.LogIAPReceipt_GooglePlaySubscription(testIAPPackId, testIAPToken);
+        SuperfineSDK.LogIAPReceipt_GooglePlaySubscriptionv2(testIAPToken);
 
         SuperfineSDK.LogLocation(1.0, 2.0);
 
         SuperfineSDK.LogFacebookLogin(testFacebookId);
         SuperfineSDK.LogFacebookLogout(testFacebookId);
 
-        SuperfineSDK.LogUpdateGame("2.0.0");
-        SuperfineSDK.LogRateGame();
+        SuperfineSDK.LogUpdateApp("2.0.0");
+        SuperfineSDK.LogRateApp();
 
         SuperfineSDK.LogAccountLogin(testAccountId, testAccountType);
         SuperfineSDK.LogAccountLogout(testAccountId, testAccountType);
@@ -219,11 +242,19 @@ public class SampleScene : MonoBehaviour
 
         SuperfineSDK.LogCryptoPayment(testCryptoPackId, 0.01, 1, "ETH", "ethereum");
 
-        SuperfineSDK.LogAdRevenue(testAdNetworkId, 1.0, "USD", "DIRECT", new Superfine.Unity.SimpleJSON.JSONObject
-        {
-            { "param1", "abc" },
-            { "param2", 100 },
-            { "param3", true }
-        });
+        JSONObject adRevenueData = new Superfine.Unity.SimpleJSON.JSONObject();
+        string param1 = "abc";
+        int param2 = 100;
+        bool param3 = true;
+        long param4 = 9223372036854775807L;
+        double param5 = 0.0000000000000001;
+
+        adRevenueData.Add("param1", param1);
+        adRevenueData.Add("param2", param2);
+        adRevenueData.Add("param3", param3);
+        adRevenueData.Add("param4", param4);
+        adRevenueData.Add("param5", param5);
+
+        SuperfineSDK.LogAdRevenue(testAdNetworkId, 1.0, "USD", "DIRECT", adRevenueData);
     }
 }
