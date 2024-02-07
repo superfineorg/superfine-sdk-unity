@@ -3,11 +3,8 @@
 ## 1.1 Import Unity package
 Download the SuperfineSDK zip file, unzip it, and copy the extracted files to your Packages folder.
 
-\* The SDK requires JSON.NET and external-dependency-manager to function properly. We have included them within the SDK, but you have the flexibility to remove or modify them to match the version requirements of your application from the file: **Packages/com.superfine.attribution/package.json**
-```groovy
-"com.unity.nuget.newtonsoft-json": "3.2.1",
-"com.google.external-dependency-manager": "1.2.176"
-```
+\* The SDK requires the External Dependency Manager to function properly. You have the flexibility to remove or modify these dependencies to match your application's version requirements. You can download the External Dependency Manager from https://developers.google.com/unity/archive#external_dependency_manager_for_unity.
+
 ## 1.2 Get App Information
 Go to the project section on the Superfine.org dashboard, select the project, and copy the **Project ID** and **Project Secret**
 
@@ -329,7 +326,7 @@ We offer ad revenue reporting support through our addon classes. Automatically r
 ### Facebook Events Addon Helper Class
 The SuperfineSDKFacebook class simplifies sending events to Facebook for marketing purposes. To smoothly integrate this feature, follow these steps:
 - **Integration**: 
-    - Add the Facebook Addon to your project by going to the **Superfine** > **Add ons** > **Facebook**..
+    - Add the Facebook Addon to your project by going to the **Superfine** > **Add ons** > **Facebook**
     - After initializing the Facebook SDK, call `SuperfineSDKFacebook.OnFacebookInitialized();`
 - **Event Registration**: Begin logging events with `SuperfineSDKFacebook.RegisterSendEvent()`. When done, turn it off using `SuperfineSDKFacebook.UnregisterSendEvent()` or when your manager class is removed.
 
