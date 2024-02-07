@@ -300,7 +300,7 @@ private void ProcessProductFinal(Product p, string receipt = null)
 We offer ad revenue reporting support through our addon classes. Automatically receive detailed reports by implementing the appropriate class based on your chosen mediation platform and registering for events. Currently, we provide support for the following mediations: Max Mediation (AppLovin), Appodeal (both UMP and Manual version), IronSource Mediation, and Google AdMob Mediation.
 
 #### Applovin Addons Helper Class
-- **Integration**: Add the AppLovin Helper Addons to your project by going to the **Superfine** > **Copy AppLovin Addon**.
+- **Integration**: Add the AppLovin Helper Addons to your project by going to the **Superfine** > **Add ons** > **AppLovin**.
 - **Event Registration**: Begin logging revenue and impressions by calling `SuperfineSDKApplovin.RegisterPaidEvent()`. When you're done, turn it off with `SuperfineSDKApplovin.UnregisterPaidEvent()` or when your manager class is destroyed.
 
 #### Appodeal Addons Helper Class
