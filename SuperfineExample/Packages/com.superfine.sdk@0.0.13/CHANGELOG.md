@@ -81,9 +81,9 @@
 - Released Android SDK version 0.0.10.
 
 ## [0.0.13]
-- Adding Appsflyer Module 
-- Adding Adjust Module
-- Adding Singular Module 
-- Adding Appodeal Addon (Unity engine)
-- Release iOS SDK version 0.0.13
-- Release Android SDK version 0.0.13
+- Adding Appsflyer Module.
+- Adding Adjust Module.
+- Adding Singular Module.
+- Adding Appodeal Addon for Unity Engine.
+- Released iOS SDK version 0.0.13.
+- Released Android SDK version 0.0.13.
