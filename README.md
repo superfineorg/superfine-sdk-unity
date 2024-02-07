@@ -9,11 +9,11 @@ Download the SuperfineSDK zip file, unzip it, and copy the extracted files to yo
 "com.google.external-dependency-manager": "1.2.176"
 ```
 ## 1.2 Get App Information
-Go to the project section on the Superfine.org dashboard, select the project, and copy the **Project ID** and **Superfine App Secret**
+Go to the project section on the Superfine.org dashboard, select the project, and copy the **Project ID** and **Project Secret**
 
 ## 1.3 Update Superfine Setting
 From the menu pick **Superfine/Edit Settings**
-Update your **Project ID**, **Superfine App Secret**
+Update your **Project ID**, **Project Secret**
 
 ## 1.4 Initialize SDK
 Add code to initialize the SDK (could be placed in the Awake function of a new component).
@@ -21,22 +21,22 @@ Add code to initialize the SDK (could be placed in the Awake function of a new c
 ```groovy
 void Awake()
 {
-    SuperfineSDKInitOptions options = new SuperfineSDKInitOptions();
+    SuperfineSDKSettings settings = SuperfineSDKSettings.LoadFromResources().Clone();
 
 #if !UNITY_EDITOR
 #if UNITY_ANDROID
     // Enable VERBOSE (or INFO, DEBUG) logging for Android.
-    options.logLevel = LogLevel.VERBOSE;
+    settings.logLevel = LogLevel.VERBOSE;
 #elif UNITY_IOS
     // Enable debug mode for iOS
-    options.debug = true; 
+    settings.debug = true; 
 #endif
 #endif
        // Create an instance of SuperfineSDK
-    SuperfineSDK.CreateInstance(options);
+    SuperfineSDK.CreateInstance(settings);
 }
 ```
-**SuperfineSDKInitOptions**: Can’t be null. Contains:
+**SuperfineSDKSettings**: Can’t be null. Contains:
 - flushInterval (**Long**): Time interval (milliseconds) for data flush to the server.
 - flushQueueSize (**Integer**): Maximum number of stored events before server flush.
 - customUserId (**Boolean**): Flag for using a custom user ID. 
@@ -50,8 +50,8 @@ void Awake()
 
 You can start it whenever you like if you set autoStart = false
 ```groovy
-options.autoStart = false;
-SuperfineSDK.CreateInstance(options);
+settings.autoStart = false;
+SuperfineSDK.CreateInstance(settings);
 
 //Start SuperfineSDK when you want to
 SuperfineSDK.Start();
@@ -300,18 +300,24 @@ private void ProcessProductFinal(Product p, string receipt = null)
 
 
 ### Ads reporting helper class
-We offer ad revenue reporting support through our addon classes. Automatically receive detailed reports by implementing the appropriate class based on your chosen mediation platform and registering for events. Currently, we provide support for the following mediations: Max Mediation (AppLovin), IronSource Mediation, and Google AdMob Mediation.
+We offer ad revenue reporting support through our addon classes. Automatically receive detailed reports by implementing the appropriate class based on your chosen mediation platform and registering for events. Currently, we provide support for the following mediations: Max Mediation (AppLovin), Appodeal (both UMP and Manual version), IronSource Mediation, and Google AdMob Mediation.
 
 #### Applovin Addons Helper Class
 - **Integration**: Add the AppLovin Helper Addons to your project by going to the **Superfine** > **Copy AppLovin Addon**.
 - **Event Registration**: Begin logging revenue and impressions by calling `SuperfineSDKApplovin.RegisterPaidEvent()`. When you're done, turn it off with `SuperfineSDKApplovin.UnregisterPaidEvent()` or when your manager class is destroyed.
 
+#### Appodeal Addons Helper Class
+- **Integration**: Add the Appodeal Helper Addons to your project by going to the 
+    - **Superfine** > **Add ons** > **Appodeal (UMP)** (for the UMP version).
+    - **Superfine** > **Add ons** > **Appodeal (Manual)** (for the Manual version).
+- **Event Registration**: Begin logging revenue and impressions by calling `SuperfineSDKAppodeal.RegisterPaidEvent()`. When you're done, turn it off with `SuperfineSDKAppodeal.UnregisterPaidEvent()` or when your manager class is destroyed.
+
 #### IronSource Addons Helper Class
-- **Integration**: Add the Ironsource Helper Addons to your project by going to the **Superfine** > **Copy IronSource Addon**.
+- **Integration**: Add the Ironsource Helper Addons to your project by going to the **Superfine** > **Add ons** > **IronSource**.
 - **Event Registration**: Begin logging revenue and impressions with `SuperfineSDKIronSource.RegisterPaidEvent()`. Turn it off with `SuperfineSDKIronSource.UnregisterPaidEvent()` when done or when your manager class is removed.
 
 #### Google AdMob Addon Helper Class
-- **Integration**: Add the Admob Helper Addons to your project by going to the **Superfine** > **Copy Admob Addon**.
+- **Integration**: Add the Admob Helper Addons to your project by going to the **Superfine** > **Add ons** > **Admob**.
 -**Event Registration**: For Google Admob you have to register events for all placement that you have.
     - For Banner: `SuperfineSDKAdMob.RegisterBannerViewPaidEvent(bannerView, adUnitId)` and `SuperfineSDKAdMob.UnregisterBannerViewPaidEvent(bannerView, adUnitId)`.
     - For Interstitial: `SuperfineSDKAdMob.RegisterInterstitialAdPaidEvent(interstitialAd, adUnitId)` and `SuperfineSDKAdMob.UnregisterInterstitialAdPaidEvent(interstitialAd, adUnitId)`.
@@ -320,9 +326,11 @@ We offer ad revenue reporting support through our addon classes. Automatically r
     - For App Open `SuperfineSDKAdMob.RegisterAppOpenAdPaidEvent(appOpenAd, adUnitId)` and `SuperfineSDKAdMob.UnregisterAppOpenAdPaidEvent(appOpenAd, adUnitId)`.
     - For the Ad revenue `SuperfineSDK.LogAdRevenue()`.
 
-### Facebook Events Helper Class
+### Facebook Events Addon Helper Class
 The SuperfineSDKFacebook class simplifies sending events to Facebook for marketing purposes. To smoothly integrate this feature, follow these steps:
-- **Integration**: Add the Facebook Addon by copying it from the Superfine menu.
+- **Integration**: 
+    - Add the Facebook Addon to your project by going to the **Superfine** > **Add ons** > **Facebook**..
+    - After initializing the Facebook SDK, call `SuperfineSDKFacebook.OnFacebookInitialized();`
 - **Event Registration**: Begin logging events with `SuperfineSDKFacebook.RegisterSendEvent()`. When done, turn it off using `SuperfineSDKFacebook.UnregisterSendEvent()` or when your manager class is removed.
 
 By following these instructions, you can effectively utilize the SuperfineSDKFacebook class to transmit custom events to Facebook, enhancing marketing insights and decision-making for your app.

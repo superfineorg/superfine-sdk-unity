@@ -1,0 +1,98 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e28426f174994405593559d4b69a408c, type: 3}
+  m_Name: SuperfineSettings
+  m_EditorClassIdentifier: Superfine SDK:Superfine.Unity:SuperfineSDKSettings
+  appId: 64ae1b11c3ceeb387c0cf88f
+  appSecret: 80d2682b206211eeae66927620615b6b
+  host: 
+  flushQueueSize: 5
+  flushInterval: 15000
+  waitConfigId: 0
+  configId: my_config
+  customUserId: my_user_id
+  autoStart: 1
+  offline: 0
+  sendInBackground: 1
+  captureDeepLinks: 1
+  enableCoppa: 0
+  modules: []
+  nativeModules: []
+  facebookAppId: 
+  instagramAppId: 
+  appleAppId: 
+  appleSignInClientId: 
+  appleDeveloperTeamId: 
+  googlePlayGameServicesProjectId: 
+  googlePlayDeveloperAccountId: 
+  linkedInAppId: 
+  qqAppId: 
+  weChatAppId: 
+  tikTokAppId: 
+  customSchemes: []
+  appLinks: []
+  associatedDomains: []
+  androidStoreType: 1
+  androidLogLevel: 3
+  enableOaid: 0
+  enableFireAdvertisingId: 1
+  enablePlayStoreKidsApp: 0
+  enableReferrerSamsung: 0
+  enableReferrerXiaomi: 0
+  enableReferrerVivo: 0
+  enableReferrerHuawei: 0
+  enableReferrerMeta: 1
+  enableImei: 0
+  topicsAPIAdsSdkNames:
+  - AppLovin
+  - com.google.android.gms.ads
+  androidCaptureInAppPurchases: 1
+  androidPermissionInternet: 1
+  androidPermissionAccessNetworkState: 1
+  androidPermissionWriteExternalStorage: 0
+  androidPermissionAccessWifiState: 0
+  androidPermissionVibrate: 0
+  androidPermissionAdId: 1
+  androidPermissionInstallReferrerService: 1
+  androidPermissionReadPhoneState: 0
+  androidPermissionReadPrivilegedPhoneState: 0
+  androidPermissionWakeLock: 1
+  androidPermissionAccessCoarseLocation: 1
+  androidPermissionAccessFineLocation: 1
+  androidPermissionCheckLicense: 1
+  androidPermissionAccessAdservicesAttribution: 1
+  iosStoreType: 0
+  debug: 1
+  iosCaptureInAppPurchases: 1
+  useSkanConversionSchema: 0
+  advertisingAttributionReportEndpoint: 
+  userTrackingUsageDescription: 
+  iosFrameworkAdSupport: 1
+  iosFrameworkAdServices: 1
+  iosFrameworkStoreKit: 1
+  iosFrameworkAppTrackingTransparency: 1
+  iosFrameworkAuthenticationServices: 0
+  iosFrameworkUserNotifications: 0
+  iosFrameworkCoreTelephony: 1
+  iosFrameworkSecurity: 1
+  standaloneStoreType: -1
+  standaloneLogLevel: 3
+  registerURIScheme: 1
+  bundleId: com.superfine.trackingdemo
+  buildNumber: 2
+  desktopPath: ~/.local/share/applications
+  updateDesktopDatabase: update-desktop-database
+  proxy: 
+  caPath: 
+  sslVerify: 1
+  steamBuild: 0
+  steamAppId: 0

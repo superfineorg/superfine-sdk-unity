@@ -4,20 +4,33 @@ using UnityEngine.UI;
 using TMPro;
 
 using Superfine.Unity;
-using Superfine.Unity.SimpleJSON;
+using Facebook.Unity;
+using System.Text;
+using System;
 
 public class SampleScene : MonoBehaviour
 {
+    public string userCity;
+    public string userState;
+    public string userCountry;
+    public string userZipCode;
+    public string userEmail;
+    public int userPhoneCountryCode;
+    public string userPhoneNumber;
+    public string userFirstName;
+    public string userLastName;
+    public Vector3Int userDateOfBirth;
+    public UserGender userGender;
+
     public int levelId;
     public string levelName;
-
-    public string configId;
-    public string customUserId;
 
     public string testWalletAddress;
     public string testWalletType = "ethereum";
 
     public string testAdUnit;
+
+    public string testPushToken;
 
     public AdPlacementType testAdPlacementType = AdPlacementType.INTERSTITIAL;
     public AdPlacement testAdPlacement = AdPlacement.UNKNOWN;
@@ -43,8 +56,23 @@ public class SampleScene : MonoBehaviour
 
     public string testAdNetworkId;
 
+    public Vector2 testLocation;
+
     public TextMeshProUGUI userIdText;
+    public TextMeshProUGUI sessionIdText;
+
+    public TextMeshProUGUI hostText;
+    public TextMeshProUGUI storeTypeText;
+
+    public TextMeshProUGUI deepLinkUrlText;
+    public TextMeshProUGUI pushTokenText;
+
     public Toggle autoStartToggle;
+
+    public Toggle offlineToggle;
+    private bool offline;
+
+    public TextMeshProUGUI thirdPartyIdsText;
 
     public GameObject startButtonObject;
     public GameObject stopButtonObject;
@@ -52,39 +80,109 @@ public class SampleScene : MonoBehaviour
     public GameObject testButtonPanel;
     public GameObject testAllButtonObject;
 
+    class SampleModuleSettings : SuperfineSDKModuleSettings
+    {
+        public override string GetModuleName()
+        {
+            return "SampleModule";
+        }
+
+        public override SuperfineSDKModule CreateModule()
+        {
+            return new SampleModule(this);
+        }
+    }
+
+    class SampleModule : SuperfineSDKModule
+    {
+        public SampleModule(SuperfineSDKModuleSettings settings) : base(settings)
+        {
+        }
+
+        protected override void Initialize(SuperfineSDKModuleSettings settings)
+        {
+            base.Initialize(settings);
+           SuperfineSDK.AddStartCallback(OnStart);
+        }
+
+        private void OnStart()
+        {
+            Debug.Log("ON START MODULE");
+        }
+    }
+
     void Awake()
     {
-        SuperfineSDKInitOptions options = new SuperfineSDKInitOptions();
-        options.autoStart = false;
-
-        options.configId = configId;
-        options.customUserId = customUserId;
-
-#if !UNITY_EDITOR
-#if UNITY_ANDROID
-        options.logLevel = LogLevel.VERBOSE;
-#elif UNITY_IOS
-        options.debug = true;
-#elif UNITY_STANDALONE
-        options.logLevel = LogLevel.VERBOSE;
-        options.registerURIScheme = true;
-
-        //options.proxy = "127.0.0.1:8888";
-        //options.sslVerify = false;
-
-        //options.steamBuild = true;
-        //options.steamAppId = 480;
-#endif
+#if !UNITY_STANDALONE_OSX && !UNITY_STANDALONE_LINUX
+        if (!FB.IsInitialized)
+        {
+            FB.Init(InitFacebookCallback, OnHideUnity);
+        }
+        else
+        {
+            FB.ActivateApp();
+        }
 #endif
 
-        SuperfineSDK.CreateInstance(options);
+        SuperfineSDKSettings settings = SuperfineSDKSettings.LoadFromResources().Clone();
+        settings.AddModuleSettings<SampleModuleSettings>();
 
-        userIdText.text = SuperfineSDK.GetUserId();
-        autoStartToggle.isOn = options.autoStart;
+        offline = settings.offline;
+        offlineToggle.isOn = offline;
 
-        bool autoStart = options.autoStart;
-        startButtonObject.SetActive(!autoStart);
-        stopButtonObject.SetActive(autoStart);
+        SuperfineSDK.CreateInstance(settings);
+
+        SuperfineSDKFacebook.RegisterSendEvent();
+
+        SuperfineSDK.AddSendEventCallback(PrintEvent);
+        SuperfineSDK.AddStartCallback(OnStartSDK);
+        SuperfineSDK.AddStopCallback(OnStopSDK);
+        SuperfineSDK.AddPauseCallback(OnPauseSDK);
+        SuperfineSDK.AddResumeCallback(OnResumeSDK);
+
+        SuperfineSDK.AddDeepLinkCallback(OnSetDeepLink, true);
+        SuperfineSDK.AddPushTokenCallback(OnSetPushToken, true);
+
+        userIdText.text = StandardizeInfoText(SuperfineSDK.GetUserId(), "USER ID");
+
+        autoStartToggle.isOn = settings.autoStart;
+
+        UpdateStatusDisplay(false);
+    }
+
+#if !UNITY_STANDALONE_OSX && !UNITY_STANDALONE_LINUX
+    private void InitFacebookCallback()
+    {
+        if (FB.IsInitialized)
+        {
+            SuperfineSDKFacebook.OnFacebookInitialized();
+            FB.ActivateApp();
+        }
+        else
+        {
+            Debug.Log("Failed to Initialize the Facebook SDK");
+        }
+    }
+
+    private void OnHideUnity(bool isGameShown)
+    {
+        if (!isGameShown)
+        {
+            Time.timeScale = 0;
+        }
+        else
+        {
+            Time.timeScale = 1;
+        }
+    }
+#endif
+
+    public void OnOfflineStatusChanged(bool value)
+    {
+        if (value == offline) return;
+
+        offline = value;
+        SuperfineSDK.SetOffline(value);
     }
 
     public void TestStart()
@@ -95,7 +193,7 @@ public class SampleScene : MonoBehaviour
             {
                 Debug.Log("Authorization Tracking Status = " + status.ToString());
 
-                SuperfineSDK.UpdatePostbackConversionValue(10, "medium", true);
+                //SuperfineSDK.UpdatePostbackConversionValue(10, "medium", true);
 
                 StartTracking();
             });
@@ -109,11 +207,12 @@ public class SampleScene : MonoBehaviour
     public void TestStop()
     {
         SuperfineSDK.Stop();
+    }
 
-        stopButtonObject.SetActive(false);
-
-        testButtonPanel.SetActive(false);
-        testAllButtonObject.SetActive(false);
+    private void UpdateStatusDisplay(bool started)
+    {
+        startButtonObject.SetActive(!started);
+        stopButtonObject.SetActive(started);
     }
 
     private void PrintEvent(string eventName, string eventData)
@@ -121,12 +220,87 @@ public class SampleScene : MonoBehaviour
         Debug.LogError("SEND EVENT: " + eventName + " " + eventData);
     }
 
+    private string StandardizeInfoText(string text, string label = null)
+    {
+        string content = string.IsNullOrEmpty(text) ? "EMPTY" : text;
+
+        if (string.IsNullOrEmpty(label)) return content;
+        else return label + ": " + content;
+    }
+
+    private void UpdateThirdPartyIdsText(StringBuilder builder, string key, Func<string> func)
+    {
+        string value = func();
+        if (!string.IsNullOrEmpty(value))
+        {
+            if (builder.Length > 0) builder.Append(' ');
+            builder.Append(key).Append(':').Append(value);
+        }
+    }
+
+    private string GenerateThirdPartyIdsText()
+    {
+        StringBuilder builder = new StringBuilder();
+
+        UpdateThirdPartyIdsText(builder, "facebook", SuperfineSDK.GetFacebookAppId);
+        UpdateThirdPartyIdsText(builder, "instagram", SuperfineSDK.GetInstagramAppId);
+        UpdateThirdPartyIdsText(builder, "apple", SuperfineSDK.GetAppleAppId);
+        UpdateThirdPartyIdsText(builder, "appleSignInClient", SuperfineSDK.GetAppleSignInClientId);
+        UpdateThirdPartyIdsText(builder, "appleDeveloperTeam", SuperfineSDK.GetAppleDeveloperTeamId);
+        UpdateThirdPartyIdsText(builder, "googlePGSProject", SuperfineSDK.GetGooglePlayGameServicesProjectId);
+        UpdateThirdPartyIdsText(builder, "googlePlayAccount", SuperfineSDK.GetGooglePlayDeveloperAccountId);
+        UpdateThirdPartyIdsText(builder, "linkedin", SuperfineSDK.GetLinkedInAppId);
+        UpdateThirdPartyIdsText(builder, "qq", SuperfineSDK.GetQQAppId);
+        UpdateThirdPartyIdsText(builder, "wechat", SuperfineSDK.GetWeChatAppId);
+        UpdateThirdPartyIdsText(builder, "tiktok", SuperfineSDK.GetTikTokAppId);
+
+        return builder.ToString();
+    }
+
+    private void OnStartSDK()
+    {
+        Debug.LogError("START SDK");
+        UpdateStatusDisplay(true);
+
+        sessionIdText.text = StandardizeInfoText(SuperfineSDK.GetSessionId(), "SESSION ID");
+
+        hostText.text = StandardizeInfoText(SuperfineSDK.GetHost(), "HOST");
+        storeTypeText.text = StandardizeInfoText(SuperfineSDK.GetStoreType().ToString(), "STORE");
+
+        thirdPartyIdsText.text = GenerateThirdPartyIdsText();
+    }
+
+    private void OnStopSDK()
+    {
+        Debug.LogError("STOP SDK");
+        UpdateStatusDisplay(false);
+        autoStartToggle.isOn = false;
+    }
+
+    private void OnPauseSDK()
+    {
+        Debug.LogError("PAUSE SDK");
+    }
+
+    private void OnResumeSDK()
+    {
+        Debug.LogError("RESUME SDK");
+        sessionIdText.text = StandardizeInfoText(SuperfineSDK.GetSessionId(), "SESSION ID");
+    }
+
+    private void OnSetDeepLink(string url)
+    {
+        deepLinkUrlText.text = StandardizeInfoText(url, "DEEP LINK");
+    }
+
+    private void OnSetPushToken(string token)
+    {
+        pushTokenText.text = StandardizeInfoText(token, "PUSH TOKEN");
+    }
+
     private void StartTracking()
     {
         SuperfineSDK.Start();
-        userIdText.text = SuperfineSDK.GetUserId();
-
-        SuperfineSDK.AddSendEventCallback(PrintEvent);
 
         startButtonObject.SetActive(false);
         stopButtonObject.SetActive(true);
@@ -190,11 +364,47 @@ public class SampleScene : MonoBehaviour
         SuperfineSDK.GdprForgetMe();
     }
 
+    public void TestPushToken()
+    {
+        if (string.IsNullOrEmpty(testPushToken)) return;
+        SuperfineSDK.SetPushToken(testPushToken);
+    }
+
     public void TestAll()
     {
+        SuperfineSDK.SetUserCity(userCity);
+        SuperfineSDK.SetUserState(userState);
+        SuperfineSDK.SetUserCountry(userCountry);
+        SuperfineSDK.SetUserZipCode(userZipCode);
+        SuperfineSDK.AddUserEmail(userEmail);
+        SuperfineSDK.AddUserPhoneNumber(userPhoneCountryCode, userPhoneNumber);
+        SuperfineSDK.SetUserName(userFirstName, userLastName);
+        SuperfineSDK.SetUserDateOfBirth(userDateOfBirth.x, userDateOfBirth.y, userDateOfBirth.z);
+        SuperfineSDK.SetUserGender(userGender);
+
+        SuperfineSDK.LogFacebookLink("FACEBOOK_USER_ID");
+        SuperfineSDK.LogInstagramLink("INSTAGRAM_USER_ID");
+        SuperfineSDK.LogAppleLink("APPLE_USER_ID");
+        SuperfineSDK.LogAppleGameCenterLink("APPLE_GAME_CENTER_USER_ID");
+        SuperfineSDK.LogGoogleLink("GOOGLE_USER_ID");
+        SuperfineSDK.LogGooglePlayGameServicesLink("GOOGLE_PLAY_GAME_SERVICES_USER_ID");
+        SuperfineSDK.LogLinkedInLink("LINKEDIN_USER_ID");
+        SuperfineSDK.LogMeetupLink("MEETUP_USER_ID");
+        SuperfineSDK.LogGitHubLink("GITHUB_USER_ID");
+        SuperfineSDK.LogDiscordLink("DISCORD_USER_ID");
+        SuperfineSDK.LogTwitterLink("TWITTER_USER_ID");
+        SuperfineSDK.LogSpotifyLink("SPOTIFY_USER_ID");
+        SuperfineSDK.LogMicrosoftLink("MICROSOFT_USER_ID");
+        SuperfineSDK.LogLINELink("LINE_USER_ID");
+        SuperfineSDK.LogVKLink("VK_USER_ID");
+        SuperfineSDK.LogQQLink("QQ_USER_ID");
+        SuperfineSDK.LogWeChatLink("WECHAT_USER_ID");
+        SuperfineSDK.LogTikTokLink("TIKTOK_USER_ID");
+        SuperfineSDK.LogWeiboLink("WEIBO_USER_ID");
+
         SuperfineSDK.LogBootStart();
         SuperfineSDK.LogBootEnd();
-
+        
         SuperfineSDK.LogLevelStart(levelId, levelName);
         SuperfineSDK.LogLevelEnd(levelId, levelName, true);
         SuperfineSDK.LogLevelEnd(levelId, levelName, false);
@@ -203,9 +413,6 @@ public class SampleScene : MonoBehaviour
         SuperfineSDK.LogAdImpression(testAdUnit, testAdPlacementType, testAdPlacement);
         SuperfineSDK.LogAdClick(testAdUnit, testAdPlacementType, testAdPlacement);
         SuperfineSDK.LogAdClose(testAdUnit, testAdPlacementType, testAdPlacement);
-
-        SuperfineSDK.SetConfigId(configId);
-        SuperfineSDK.SetCustomUserId(customUserId);
 
         SuperfineSDK.LogIAPInitialization(true);
         SuperfineSDK.LogIAPRestorePurchase();
@@ -226,35 +433,59 @@ public class SampleScene : MonoBehaviour
 
         SuperfineSDK.LogLocation(1.0, 2.0);
 
-        SuperfineSDK.LogFacebookLogin(testFacebookId);
-        SuperfineSDK.LogFacebookLogout(testFacebookId);
-
         SuperfineSDK.LogUpdateApp("2.0.0");
         SuperfineSDK.LogRateApp();
-
-        SuperfineSDK.LogAccountLogin(testAccountId, testAccountType);
-        SuperfineSDK.LogAccountLogout(testAccountId, testAccountType);
-        SuperfineSDK.LogAccountLink(testFacebookId, "facebook");
-        SuperfineSDK.LogAccountUnlink(testFacebookId, "facebook");
 
         SuperfineSDK.LogWalletLink(testWalletAddress, testWalletType);
         SuperfineSDK.LogWalletUnlink(testWalletAddress, testWalletType);
 
         SuperfineSDK.LogCryptoPayment(testCryptoPackId, 0.01, 1, "ETH", "ethereum");
 
-        JSONObject adRevenueData = new Superfine.Unity.SimpleJSON.JSONObject();
         string param1 = "abc";
         int param2 = 100;
         bool param3 = true;
         long param4 = 9223372036854775807L;
         double param5 = 0.0000000000000001;
-
-        adRevenueData.Add("param1", param1);
-        adRevenueData.Add("param2", param2);
-        adRevenueData.Add("param3", param3);
-        adRevenueData.Add("param4", param4);
-        adRevenueData.Add("param5", param5);
+        Superfine.Unity.SimpleJSON.JSONObject adRevenueData = new Superfine.Unity.SimpleJSON.JSONObject
+        {
+            { "param1", param1 },
+            { "param2", param2 },
+            { "param3", param3 },
+            { "param4", param4 },
+            { "param5", param5 }
+        };
 
         SuperfineSDK.LogAdRevenue(testAdNetworkId, 1.0, "USD", "DIRECT", adRevenueData);
+
+        SuperfineSDK.LogLocation(testLocation.x, testLocation.y);
+
+        SuperfineSDK.Log("test");
+        SuperfineSDK.Log("test2", 123);
+        SuperfineSDK.Log("test3", "ABC");
+        SuperfineSDK.Log("test4", EventFlag.WAIT_OPEN_EVENT);
+
+        Superfine.Unity.SimpleJSON.JSONObject testRevenueData = new Superfine.Unity.SimpleJSON.JSONObject
+        {
+            { "currency", "USD" },
+            { "revenue", 0.01 }
+        };
+        SuperfineSDK.Log("test_revenue", testRevenueData);
+
+        SuperfineSDK.Log("test_cache", EventFlag.CACHE);
+    }
+
+    public void FetchRemoteConfig()
+    {
+        SuperfineSDK.FetchRemoteConfig((obj) =>
+        {
+            if (obj == null)
+            {
+                Debug.LogError("REMOTE CONFIG = NULL");
+            }
+            else
+            {
+                Debug.LogError("REMOTE CONFIG = " + obj.ToString());
+            }
+        });
     }
 }
