@@ -15,7 +15,7 @@ Update your **Project ID**, **Project Secret**
 ## 1.4 Initialize SDK
 Add code to initialize the SDK (this could be placed in the `Awake` function of a new component).
 
-```groovy
+```csharp
 void Awake()
 {
     SuperfineSDKSettings settings = SuperfineSDKSettings.LoadFromResources().Clone();
@@ -34,6 +34,7 @@ void Awake()
 }
 ```
 **SuperfineSDKSettings**: Can’t be null. Contains:
+
 - `flushInterval` (**Long**): Time interval (in milliseconds) for data flush to the server.
 - `flushQueueSize` (**Integer**): Maximum number of stored events before a server flush.
 - `customUserId` (**Boolean**): Flag for using a custom user ID. 
@@ -47,7 +48,7 @@ void Awake()
 
 You can start it whenever you like if you set `autoStart` to false.
 
-```groovy
+```csharp
 settings.autoStart = false;
 SuperfineSDK.CreateInstance(settings);
 
@@ -55,44 +56,49 @@ SuperfineSDK.CreateInstance(settings);
 SuperfineSDK.Start();
 ```
 You can stop SuperfineSDK by calling this function:
-```groovy
+
+```csharp
 SuperfineSDK.Stop();
 ```
+
 # 2 Send Events
 ## 2.1 Wallet Events
 ### LogWalletLink
-**`void LogWalletLink(const String wallet, const String type = "ethereum");`**
+> **`void LogWalletLink(const String wallet, const String type = "ethereum");`**
 
-Call this method when you want to link the user's wallet address.
-| Parameters       |                   |
+**Description**: Call this method when you want to link the user's wallet address.
+
+| **Parameters**       |                   |
 |-----------------|---------------     |
 | `wallet`            | **String**: Cannot be null. The wallet address you want to log the linking event for|
 |`type`               | **String**: Default is "ethereum". The chain of the wallet address|
 
 *Example:*
-```groovy
+```csharp
 //Link wallet address "ronin:50460c4cd74094cd591455cad457e99c4ab8be0" in the "ronin" chain
 SuperfineSDK.LogWalletLink("ronin:50460c4cd74094cd591455cad457e99c4ab8be0", "ronin");
 ```
 ### LogWalletUnlink
-**`void LogWalletUnlink(const String wallet, const String type = "ethereum");`**
+> **`void LogWalletUnlink(const String wallet, const String type = "ethereum");`**
 
-Call this method when you want to unlink the user’s wallet address. 
+**Description**: Call this method when you want to unlink the user’s wallet address. 
+
 | Parameters       |                   |
 |-----------------|---------------     |
 | `wallet`        | **String**: Can’t be null. The wallet address you want to log the unlinking event for.|
 | `type`          | **String**: Default is "ethereum". The chain of the wallet address.|
 
 *Example:*
-```groovy
+
+```csharp
 //Unlink wallet address "ronin:50460c4cd74094cd591455cad457e99c4ab8be0" in "ronin" chain
 SuperfineSDK.LogWalletUnlink("ronin:50460c4cd74094cd591455cad457e99c4ab8be0", "ronin");
 ```
 ## 2.2 Game Level Events
 ### LogLevelStart
-**`void LogLevelStart(int id, const String name);`**
+> **`void LogLevelStart(int id, const String name);`**
 
-Call this method at the start of a level.
+**Description**: Call this method at the start of a level.
 
 | Parameters       |                   |
 |-----------------|---------------     |
@@ -100,14 +106,16 @@ Call this method at the start of a level.
 | `name`            | **String**: Can’t be null. The name of the level that you want to log.|
 
 *Example:*
-```groovy
+
+```csharp
 // Log starting level ID 10 with the name "level_10".
 SuperfineSDK.LogLevelStart(10, "level_10");
 ```
 ### LogLevelEnd
-**`void LogLevelEnd(int id, const String name, bool isSuccess);`**
+> **`void LogLevelEnd(int id, const String name, bool isSuccess);`**
 
-Call this method upon completing a level.
+**Description**: Call this method upon completing a level.
+
 | Parameters       |                   |
 |-----------------|---------------     |
 | `id`            | **Integer**: Can’t be null. The level id you want to log.|
@@ -115,16 +123,18 @@ Call this method upon completing a level.
 | `isSuccess`     | **Boolean**: Can’t be null. True if the level was passed, false otherwise.|
 
 *Example:*
-```groovy
+
+```csharp
 // Log that you completed level ID 10 with the name "level_10" and won.
 SuperfineSDK.LogLevelEnd(10, "level_10", true);
 ```
 ## 2.3 Ads Events
 These events are used to track ads from your app. You can use the Superfine dashboard later to check ad performance based on these events.
 ### LogAdLoad
-**`void LogAdLoad(const String adUnit, AdPlacementType adPlacementType, AdPlacement adPlacement = AdPlacement::UNKNOWN);`**
+> **`void LogAdLoad(const String adUnit, AdPlacementType adPlacementType, AdPlacement adPlacement = AdPlacement::UNKNOWN);`**
 
-Call this method when an ad placement is loaded.
+**Description**: Call this method when an ad placement is loaded.
+
 | Parameters       |                   |
 |-----------------|---------------     |
 | `adUnit`         | **String**: Can’t be null. The ad unit you want to log.|
@@ -132,14 +142,16 @@ Call this method when an ad placement is loaded.
 |`adPlacement`      |**enum AdPlacement**: Can be UNKNOWN, BOTTOM, TOP, LEFT, RIGHT, FULL_SCREEN. |
 
 *Example:*
-```groovy
+
+```csharp
 // Log ad unit "ad_unit_test" with ad placement type INTERSTITIAL at placement FULL_SCREEN loaded.
 SuperfineSDK.LogAdLoad("ad_unit_test", AdPlacementType.INTERSTITIAL, AdPlacement.FULL_SCREEN);
 ```
 ### LogAdClosed
-**`void LogAdClosed(string adUnit, AdPlacementType adPlacementType, AdPlacement adPlacement = AdPlacement.UNKNOWN);`**
+> **`void LogAdClosed(string adUnit, AdPlacementType adPlacementType, AdPlacement adPlacement = AdPlacement.UNKNOWN);`**
 
-Call this method when an ad is closed.
+**Description**: Call this method when an ad is closed.
+
 | Parameters       |                   |
 |-----------------|---------------     |
 | `adUnit`         | **String**: Can’t be null. The ad unit you want to log.|
@@ -147,14 +159,16 @@ Call this method when an ad is closed.
 |`adPlacement`      |**enum AdPlacement**: Can’t be null. Can be UNKNOWN, BOTTOM, TOP, LEFT, RIGHT, FULL_SCREEN. |
 
 *Example:*
-```groovy
+
+```csharp
 // Log ad unit "ad_unit_test" with ad placement type INTERSTITIAL at placement FULL_SCREEN closed.
 SuperfineSDK.LogAdClosed("ad_unit_test", AdPlacementType.INTERSTITIAL, AdPlacement.FULL_SCREEN);
 ```
 ### LogAdImpression
-**`void LogAdImpression(string adUnit, AdPlacementType adPlacementType, AdPlacement adPlacement = AdPlacement.UNKNOWN);`**
+> **`void LogAdImpression(string adUnit, AdPlacementType adPlacementType, AdPlacement adPlacement = AdPlacement.UNKNOWN);`**
 
-Call this method when the ad impression is displayed.
+**Description**: Call this method when the ad impression is displayed.
+
 | Parameters       |                   |
 |-----------------|---------------     |
 | `adUnit`         | **String**: Can’t be null. The ad unit you want to log.|
@@ -162,14 +176,16 @@ Call this method when the ad impression is displayed.
 |`adPlacement`      |**enum AdPlacement**: Can’t be null. Can be UNKNOWN, BOTTOM, TOP, LEFT, RIGHT, FULL_SCREEN. |
 
 *Example:*
-```groovy
+
+```csharp
 // Log ad unit "ad_unit_test" with ad placement type INTERSTITIAL at placement FULL_SCREEN impression.
 SuperfineSDK.LogAdImpression("ad_unit_test", AdPlacementType.INTERSTITIAL, AdPlacement.FULL_SCREEN); 
 ```
 ### LogAdClick
-**`void LogAdClick(string adUnit, AdPlacementType adPlacementType, AdPlacement adPlacement = AdPlacement.UNKNOWN);`**
+> **`void LogAdClick(string adUnit, AdPlacementType adPlacementType, AdPlacement adPlacement = AdPlacement.UNKNOWN);`**
 
-Call this method when the user clicks on an ad.
+**Description**: Call this method when the user clicks on an ad.
+
 | Parameters       |                   |
 |-----------------|---------------     |
 | `adUnit`         | **String**: Can’t be null. The ad unit you want to log.|
@@ -177,14 +193,16 @@ Call this method when the user clicks on an ad.
 |`adPlacement`      |**enum AdPlacement**: Can’t be null.  Can be UNKNOWN, BOTTOM, TOP, LEFT, RIGHT, FULL SCREEN. |
 
 *Example:*
-```groovy
+
+```csharp
 // Log ad unit "ad_unit_test" with ad placement type INTERSTITIAL at placement FULL_SCREEN clicked.
 SuperfineSDK.LogAdClick("ad_unit_test", AdPlacementType.INTERSTITIAL, AdPlacement.FULL_SCREEN);
 ```
 ### LogAdRevenue
-**`void LogAdRevenue(string network, double revenue, string currency, string mediation = "", SimpleJSON.JSONObject networkData = null)`**
+> **`void LogAdRevenue(string network, double revenue, string currency, string mediation = "", SimpleJSON.JSONObject networkData = null)`**
 
-Call this method to record revenue obtained from an advertisement.
+**Description**: Call this method to record revenue obtained from an advertisement.
+
 | Parameters       |                   |
 |-----------------|---------------     |
 | `network`         | **String**: Can’t be null. The ad network that generated the revenue.|
@@ -194,7 +212,8 @@ Call this method to record revenue obtained from an advertisement.
 | `networkData` | **SimpleJSON.JSONObject**:  Can be null. Additional information about the ad-network. |
 
 *Example:*
-```groovy
+
+```csharp
 SuperfineSDK.LogAdRevenue(testAdNetworkId, 1.0, "USD", "DIRECT", new Superfine.Unity.SimpleJSON.JSONObject
         {
             { "param1", "abc" },
@@ -206,9 +225,10 @@ SuperfineSDK.LogAdRevenue(testAdNetworkId, 1.0, "USD", "DIRECT", new Superfine.U
 ## 2.4 IAP Events 
 These events are used to track in-app purchases from your app.
 ### LogIAPResult
-**`void LogIAPResult(string pack, float price, int amount, string currency, bool isSuccess);`**
+> **`void LogIAPResult(string pack, float price, int amount, string currency, bool isSuccess);`**
 
-Call this method when the user attempts to buy an IAP item.
+**Description**: Call this method when the user attempts to buy an IAP item.
+
 | Parameters       |                   |
 |-----------------|---------------     |
 | `pack`         | **String**: Can’t be null. The unique identifier of the purchased item or pack.|
@@ -218,56 +238,63 @@ Call this method when the user attempts to buy an IAP item.
 | `isSuccess`    | **Boolean**: Can’t be null. True if the purchase was successful. False if the purchase failed. |
 
 *Example:*
-```groovy
+
+```csharp
 //Log when the user completed to purchase a package with ID "test_pack" for 0.99 USD, getting 150 units.
 SuperfineSDK.LogIAPResult("test_pack", 0.99, 150, "USD", true);
 ```
 ### LogAPRestorePurchase
-**`void LogAPRestorePurchase();`**
+> **`void LogAPRestorePurchase();`**
 
-Call this method when a user attempts to restore a purchase.
+**Description**: Call this method when a user attempts to restore a purchase.
 
 *Example:*
-```groovy
+
+```csharp
 SuperfineSDK.LogIAPRestorePurchase(); 
 ```
 
 ## 2.5 Custom Events
 ### Log
-**`void Log(string eventName, int data);`**
+> **`void Log(string eventName, int data);`**
 
-Call this method to log a custom event with integer data.
+**Description**: Call this method to log a custom event with integer data.
+
 | Parameters       |                   |
 |-----------------|---------------     |
 | `eventName`     | **String**: Can’t be null. The name of your custom event.|
 | `data`         | **Int**: Can’t be null. The integer data associated with the event.|
 
-**`void Log(string eventName, string data);`**
+> **`void Log(string eventName, string data);`**
 
-Call this method to log a custom event with string data.
+**Description**: Call this method to log a custom event with string data.
+
 | Parameters       |                   |
 |-----------------|---------------     |
 | `eventName`     | **String**: Can’t be null. The name of your custom event.|
 | `data`         | **String**: Can’t be null. The string data associated with the event.|
 
-**`void Log(string eventName, Dictionary<string, string> data = null);`**
+> **`void Log(string eventName, Dictionary<string, string> data = null);`**
 
-Call this method to log a custom event with dictionary data.
+**Description**: Call this method to log a custom event with dictionary data.
+
 | Parameters       |                   |
 |-----------------|---------------     |
 | `eventName`     | **String**: Can’t be null. The name of your custom event.|
 | `data`         | **Dictionary<string, string>**: Default is null. The dictionary data associated with the event.|
 
-**`void Log(string eventName, SimpleJSON.JSONObject data = null);`**
+> **`void Log(string eventName, SimpleJSON.JSONObject data = null);`**
 
-Call this method to log a custom event with JSON object data.
+**Description**: Call this method to log a custom event with JSON object data.
+
 | Parameters       |                   |
 |-----------------|---------------     |
 | `eventName`     | **String**: Can’t be null. The name of your custom event.|
 | `data`          | **SimpleJSON.JSONObject**: Default is null. The JSON object data associated with the event.|
 
 *Example:*
-```groovy
+
+```csharp
 // Log a custom event with JSON object data
 SimpleJSON.JSONObject eventData = new SimpleJSON.JSONObject();
 eventData["score"] = 1000;
@@ -282,8 +309,10 @@ SuperfineSDK.Log("My_Custom_Event_Name", eventData);
 The SuperfineSDKUnityIAP class simplifies the process of sending In-App Purchase (IAP) receipt events. Ensure you are using the **Unity IAP** package for this functionality.
 - **Integration** Add the Uinity IAP Helper Addons to your project by going to the **Superfine** > **Add ons** > **UnityIAP**.
 - **Sending Event**: Call `Superfine.Unity.SuperfineSDKUnityIAP.LogIAPReceipt(Product p)` when a purchase is successfully completed using the Unity IAP plugin.
+
 *Example:*
-```groovy
+
+```csharp
 // Callback function for successful purchase
 private void ProcessProductFinal(Product p, string receipt = null)
     {
@@ -336,7 +365,8 @@ By following these instructions, you can effectively utilize the SuperfineSDKFac
 
 ## 2.7 Postback Conversion Value for iOS
 The method allows you to update both the conversion value and coarse conversion values, and it provides the option to send the postback before the conversion window ends. Additionally, it allows you to specify a completion handler to handle situations where the update fails.
-```groovy
+
+```csharp
 using Superfine.Tracking.Unity;
 
 // Example 1: Basic usage without coarseValue or lockWindow
