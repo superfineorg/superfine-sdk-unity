@@ -1,19 +1,19 @@
 # Superfine SDK Unity
 # 1 Setup
 ## 1.1 Import Unity package
-Download the SuperfineSDK zip file, unzip it, and copy the extracted files to your Packages folder.
+Download the SuperfineSDK zip file, unzip it, and copy the extracted files into your Packages folder.
 
-\* The SDK requires the External Dependency Manager to function properly. You have the flexibility to remove or modify these dependencies to match your application's version requirements. You can download the External Dependency Manager from https://developers.google.com/unity/archive#external_dependency_manager_for_unity.
+\* The SDK requires the External Dependency Manager to function properly. You have the flexibility to remove or modify these dependencies to match your application's version requirements. You can download the External Dependency Manager from [here](https://developers.google.com/unity/archive#external_dependency_manager_for_unity).
 
 ## 1.2 Get App Information
-Go to the project section on the Superfine.org dashboard, select the project, and copy the **Project ID** and **Project Secret**
+Go to the project section on the Superfine.org dashboard, select your project, and copy the **Project ID** and **Project Secret**.
 
 ## 1.3 Update Superfine Setting
 From the menu pick **Superfine/Edit Settings**
 Update your **Project ID**, **Project Secret**
 
 ## 1.4 Initialize SDK
-Add code to initialize the SDK (could be placed in the Awake function of a new component).
+Add code to initialize the SDK (this could be placed in the `Awake` function of a new component).
 
 ```groovy
 void Awake()
@@ -25,32 +25,33 @@ void Awake()
     // Enable VERBOSE (or INFO, DEBUG) logging for Android.
     settings.logLevel = LogLevel.VERBOSE;
 #elif UNITY_IOS
-    // Enable debug mode for iOS
+    // Enable debug mode for iOS.
     settings.debug = true; 
 #endif
 #endif
-       // Create an instance of SuperfineSDK
+    // Create an instance of SuperfineSDK.
     SuperfineSDK.CreateInstance(settings);
 }
 ```
 **SuperfineSDKSettings**: Can’t be null. Contains:
-- flushInterval (**Long**): Time interval (milliseconds) for data flush to the server.
-- flushQueueSize (**Integer**): Maximum number of stored events before server flush.
-- customUserId (**Boolean**): Flag for using a custom user ID. 
-- userId (**String**): Custom user identifier to associate events with a user
-- waitConfigId (**Boolean**): Flag to wait for the configuration ID before starting. 
-- autoStart (**Boolean**). Flag to automatically start the SDK on initialization. 
-- storeType (**StoreType**): Can be UNKNOWN, GOOGLE_PLAY, APP_STORE
-- logLevel (**LogLevel**): for Android only. Can be VERBOSE, INFO, DEBUG)
-- debug (**Boolean**): for iOS only. If set to true, will display the debug log
-- captureInAppPurchases (**Boolean**): for iOS only. Enable capturing in-app purchases for iOS
+- `flushInterval` (**Long**): Time interval (in milliseconds) for data flush to the server.
+- `flushQueueSize` (**Integer**): Maximum number of stored events before a server flush.
+- `customUserId` (**Boolean**): Flag for using a custom user ID. 
+- `userId` (**String**): Custom user identifier to associate events with a user
+- `waitConfigId` (**Boolean**): Flag to wait for the configuration ID before starting. 
+- `autoStart` (**Boolean**). Flag to automatically start the SDK on initialization. 
+- `storeType` (**StoreType**): Can be UNKNOWN, GOOGLE_PLAY, APP_STORE
+- `logLevel` (**LogLevel**): for Android only. Can be VERBOSE, INFO, DEBUG)
+- `debug` (**Boolean**): for iOS only. If set to true, will display the debug log
+- `captureInAppPurchases` (**Boolean**): Enable capturing in-app purchases.
 
-You can start it whenever you like if you set autoStart = false
+You can start it whenever you like if you set `autoStart` to false.
+
 ```groovy
 settings.autoStart = false;
 SuperfineSDK.CreateInstance(settings);
 
-//Start SuperfineSDK when you want to
+// Start SuperfineSDK when you want to.
 SuperfineSDK.Start();
 ```
 You can stop SuperfineSDK by calling this function:
@@ -65,7 +66,7 @@ SuperfineSDK.Stop();
 Call this method when you want to link the user's wallet address.
 | Parameters       |                   |
 |-----------------|---------------     |
-| `wallet`            | **String**: Can’t be null. The wallet address that you want to log the linking event for|
+| `wallet`            | **String**: Cannot be null. The wallet address you want to log the linking event for|
 |`type`               | **String**: Default is "ethereum". The chain of the wallet address|
 
 *Example:*
@@ -74,13 +75,13 @@ Call this method when you want to link the user's wallet address.
 SuperfineSDK.LogWalletLink("ronin:50460c4cd74094cd591455cad457e99c4ab8be0", "ronin");
 ```
 ### LogWalletUnlink
-**`void LogWalletUnlink(const String& wallet, const String& type = "ethereum");`**
+**`void LogWalletUnlink(const String wallet, const String type = "ethereum");`**
 
 Call this method when you want to unlink the user’s wallet address. 
 | Parameters       |                   |
 |-----------------|---------------     |
-| `wallet`        | **String**: Can’t be null. The wallet address that you want to log the linking event for|
-| `type`          | **String**: Default is ethereum. The chain of the wallet address|
+| `wallet`        | **String**: Can’t be null. The wallet address you want to log the unlinking event for.|
+| `type`          | **String**: Default is "ethereum". The chain of the wallet address.|
 
 *Example:*
 ```groovy
@@ -91,7 +92,8 @@ SuperfineSDK.LogWalletUnlink("ronin:50460c4cd74094cd591455cad457e99c4ab8be0", "r
 ### LogLevelStart
 **`void LogLevelStart(int id, const String name);`**
 
-Call this method when starting a level:
+Call this method at the start of a level.
+
 | Parameters       |                   |
 |-----------------|---------------     |
 | `id`              | **Integer**: Can’t be null. The level id that you want to log.|
@@ -99,22 +101,22 @@ Call this method when starting a level:
 
 *Example:*
 ```groovy
-// Log start level ID 10 with the name "level_10"
-SuperfineSDK.LogLevelStart(10,"level_10");
+// Log starting level ID 10 with the name "level_10".
+SuperfineSDK.LogLevelStart(10, "level_10");
 ```
 ### LogLevelEnd
-**`void LogLevelEnd(int32 id, const String name, bool isSuccess);`**
+**`void LogLevelEnd(int id, const String name, bool isSuccess);`**
 
-Call this method when completing a level.
+Call this method upon completing a level.
 | Parameters       |                   |
 |-----------------|---------------     |
-| `id`            | **Integer**: Can’t be null. The level id that you want to log.|
-| `name`          | **String**: Can’t be null. The name of the level that you want to log.|
-| `isSuccess`     | **Boolean**: Can’t be null. True if you pass the level. False if you can't pass the level.|
+| `id`            | **Integer**: Can’t be null. The level id you want to log.|
+| `name`          | **String**: Can’t be null. The name of the level you want to log.|
+| `isSuccess`     | **Boolean**: Can’t be null. True if the level was passed, false otherwise.|
 
 *Example:*
 ```groovy
-//Log you completed level ID 10 with the name "level_10" and you won.
+// Log that you completed level ID 10 with the name "level_10" and won.
 SuperfineSDK.LogLevelEnd(10, "level_10", true);
 ```
 ## 2.3 Ads Events
@@ -125,14 +127,14 @@ These events are used to track ads from your app. You can use the Superfine dash
 Call this method when an ad placement is loaded.
 | Parameters       |                   |
 |-----------------|---------------     |
-| `adUnit`         | **String**: Can’t be null. The ad unit that you want to log.|
-| `adPlacementType` | **enum AdPlacementType**: Can’t be null. Can be:<br>- BANNER = 0<br>- INTERSTITIAL = 1<br>- REWARDED_VIDEO = 2<br>- adPlacement<br>|
-|`adPlacement`      |**enum AdPlacement**: Can’t be null. Can be:<br>- UNKNOWN = -1<br>- BOTTOM = 0<br>- TOP = 1<br>- LEFT = 2<br>- RIGHT = 3<br>- FULL_SCREEN = 4 |
+| `adUnit`         | **String**: Can’t be null. The ad unit you want to log.|
+| `adPlacementType` | **enum AdPlacementType**: Cannot be null. Can be BANNER, INTERSTITIAL, REWARDED_VIDEO.|
+|`adPlacement`      |**enum AdPlacement**: Can be UNKNOWN, BOTTOM, TOP, LEFT, RIGHT, FULL_SCREEN. |
 
 *Example:*
 ```groovy
-//Log ad unit "ad_unit_test" with ad placement type is "INTERSTITIAL" at placement "FULL_SCREEN" loaded
-SuperfineSDK.LogAdLoad("ad_unit_test", AdPlacementType.INTERSTITIAL, AdPlacement.FULL_SCREEN); 
+// Log ad unit "ad_unit_test" with ad placement type INTERSTITIAL at placement FULL_SCREEN loaded.
+SuperfineSDK.LogAdLoad("ad_unit_test", AdPlacementType.INTERSTITIAL, AdPlacement.FULL_SCREEN);
 ```
 ### LogAdClosed
 **`void LogAdClosed(string adUnit, AdPlacementType adPlacementType, AdPlacement adPlacement = AdPlacement.UNKNOWN);`**
@@ -140,13 +142,13 @@ SuperfineSDK.LogAdLoad("ad_unit_test", AdPlacementType.INTERSTITIAL, AdPlacement
 Call this method when an ad is closed.
 | Parameters       |                   |
 |-----------------|---------------     |
-| `adUnit`         | **String**: Can’t be null. The ad unit that you want to log.|
-| `adPlacementType` | **enum AdPlacementType**: Can’t be null. Can be:<br>- BANNER = 0<br>- INTERSTITIAL = 1<br>- REWARDED_VIDEO = 2<br>- adPlacement<br>|
-|`adPlacement`      |**enum AdPlacement**: Can’t be null. Can be:<br>- UNKNOWN = -1<br>- BOTTOM = 0<br>- TOP = 1<br>- LEFT = 2<br>- RIGHT = 3<br>- FULL_SCREEN = 4 |
+| `adUnit`         | **String**: Can’t be null. The ad unit you want to log.|
+| `adPlacementType` | **enum AdPlacementType**: Can’t be null. Can be BANNER, INTERSTITIAL, REWARDED_VIDEO.|
+|`adPlacement`      |**enum AdPlacement**: Can’t be null. Can be UNKNOWN, BOTTOM, TOP, LEFT, RIGHT, FULL_SCREEN. |
 
 *Example:*
 ```groovy
-//Log ad unit "ad_unit_test" with ad placement type is "INTERSTITIAL" at placement "FULL_SCREEN" closed
+// Log ad unit "ad_unit_test" with ad placement type INTERSTITIAL at placement FULL_SCREEN closed.
 SuperfineSDK.LogAdClosed("ad_unit_test", AdPlacementType.INTERSTITIAL, AdPlacement.FULL_SCREEN);
 ```
 ### LogAdImpression
@@ -155,13 +157,13 @@ SuperfineSDK.LogAdClosed("ad_unit_test", AdPlacementType.INTERSTITIAL, AdPlaceme
 Call this method when the ad impression is displayed.
 | Parameters       |                   |
 |-----------------|---------------     |
-| `adUnit`         | **String**: Can’t be null. The ad unit that you want to log.|
-| `adPlacementType` | **enum AdPlacementType**: Can’t be null. Can be:<br>- BANNER = 0<br>- INTERSTITIAL = 1<br>- REWARDED_VIDEO = 2<br>- adPlacement<br>|
-|`adPlacement`      |**enum AdPlacement**: Can’t be null. Can be:<br>- UNKNOWN = -1<br>- BOTTOM = 0<br>- TOP = 1<br>- LEFT = 2<br>- RIGHT = 3<br>- FULL_SCREEN = 4 |
+| `adUnit`         | **String**: Can’t be null. The ad unit you want to log.|
+| `adPlacementType` | **enum AdPlacementType**: Cannot be null. Can be BANNER, INTERSTITIAL, REWARDED_VIDEO.|
+|`adPlacement`      |**enum AdPlacement**: Can’t be null. Can be UNKNOWN, BOTTOM, TOP, LEFT, RIGHT, FULL_SCREEN. |
 
 *Example:*
 ```groovy
-//Log ad unit "ad_unit_test" with ad placement type is "INTERSTITIAL" at placement "FULL_SCREEN" Impression
+// Log ad unit "ad_unit_test" with ad placement type INTERSTITIAL at placement FULL_SCREEN impression.
 SuperfineSDK.LogAdImpression("ad_unit_test", AdPlacementType.INTERSTITIAL, AdPlacement.FULL_SCREEN); 
 ```
 ### LogAdClick
@@ -170,14 +172,14 @@ SuperfineSDK.LogAdImpression("ad_unit_test", AdPlacementType.INTERSTITIAL, AdPla
 Call this method when the user clicks on an ad.
 | Parameters       |                   |
 |-----------------|---------------     |
-| `adUnit`         | **String**: Can’t be null. The ad unit that you want to log.|
-| `adPlacementType` | **enum AdPlacementType**: Can’t be null. Can be:<br>- BANNER = 0<br>- INTERSTITIAL = 1<br>- REWARDED_VIDEO = 2<br>- adPlacement<br>|
-|`adPlacement`      |**enum AdPlacement**: Can’t be null. Can be:<br>- UNKNOWN = -1<br>- BOTTOM = 0<br>- TOP = 1<br>- LEFT = 2<br>- RIGHT = 3<br>- FULL_SCREEN = 4 |
+| `adUnit`         | **String**: Can’t be null. The ad unit you want to log.|
+| `adPlacementType` | **enum AdPlacementType**: Can’t be null. Can be BANNER, INTERSTITIAL, REWARDED_VIDEO.|
+|`adPlacement`      |**enum AdPlacement**: Can’t be null.  Can be UNKNOWN, BOTTOM, TOP, LEFT, RIGHT, FULL SCREEN. |
 
 *Example:*
 ```groovy
-//Log ad unit "ad_unit_test" with ad placement type is "INTERSTITIAL" at placement "FULL_SCREEN" clicked.
-SuperfineSDK.LogAdClick("ad_unit_test", AdPlacementType.INTERSTITIAL, AdPlacement.FULL_SCREEN);  
+// Log ad unit "ad_unit_test" with ad placement type INTERSTITIAL at placement FULL_SCREEN clicked.
+SuperfineSDK.LogAdClick("ad_unit_test", AdPlacementType.INTERSTITIAL, AdPlacement.FULL_SCREEN);
 ```
 ### LogAdRevenue
 **`void LogAdRevenue(string network, double revenue, string currency, string mediation = "", SimpleJSON.JSONObject networkData = null)`**
@@ -185,8 +187,8 @@ SuperfineSDK.LogAdClick("ad_unit_test", AdPlacementType.INTERSTITIAL, AdPlacemen
 Call this method to record revenue obtained from an advertisement.
 | Parameters       |                   |
 |-----------------|---------------     |
-| `network`         | **String**: Can’t be null. The ad-network that generated the revenue.|
-| `revenue` | **double**:  Can’t be null. The amount of revenue obtained from the ad-network. |
+| `network`         | **String**: Can’t be null. The ad network that generated the revenue.|
+| `revenue` | **double**:  Can’t be null. The amount of revenue obtained from the ad.|
 | `currency` | **String**:  The currency code (e.g., "USD", "EUR") corresponding to the revenue. |
 | `mediation` | **String**:  Can be empty. The mediation platform used (e.g., Direct, Max, LevelPlay, etc.). |
 | `networkData` | **SimpleJSON.JSONObject**:  Can be null. Additional information about the ad-network. |
@@ -223,7 +225,7 @@ SuperfineSDK.LogIAPResult("test_pack", 0.99, 150, "USD", true);
 ### LogAPRestorePurchase
 **`void LogAPRestorePurchase();`**
 
-Call this method when the user attempts to buy an IAP item.
+Call this method when a user attempts to restore a purchase.
 
 *Example:*
 ```groovy
@@ -276,9 +278,9 @@ SuperfineSDK.Log("My_Custom_Event_Name", eventData);
 
 ## 2.6 Addons
 
-### Unity IAP helper class
+### Unity IAP Helper Class
 The SuperfineSDKUnityIAP class simplifies the process of sending In-App Purchase (IAP) receipt events. Ensure you are using the **Unity IAP** package for this functionality.
-- **Integration** Add the Uinity IAP Helper Addons to your project by going to the **Superfine** > **Copy UnityIAP Addon**.
+- **Integration** Add the Uinity IAP Helper Addons to your project by going to the **Superfine** > **Add ons** > **UnityIAP**.
 - **Sending Event**: Call `Superfine.Unity.SuperfineSDKUnityIAP.LogIAPReceipt(Product p)` when a purchase is successfully completed using the Unity IAP plugin.
 *Example:*
 ```groovy
@@ -296,26 +298,26 @@ private void ProcessProductFinal(Product p, string receipt = null)
 ```
 
 
-### Ads reporting helper class
-We offer ad revenue reporting support through our addon classes. Automatically receive detailed reports by implementing the appropriate class based on your chosen mediation platform and registering for events. Currently, we provide support for the following mediations: Max Mediation (AppLovin), Appodeal (both UMP and Manual version), IronSource Mediation, and Google AdMob Mediation.
+### Ads Reporting Helper Class
+We offer ad revenue reporting support through our addon classes. Automatically receive detailed reports by implementing the appropriate class based on your chosen mediation platform and registering for events. Currently, we provide support for Max Mediation (AppLovin), Appodeal (both UMP and Manual version), IronSource Mediation, and Google AdMob Mediation.
 
 #### Applovin Addons Helper Class
-- **Integration**: Add the AppLovin Helper Addons to your project by going to the **Superfine** > **Add ons** > **AppLovin**.
+- **Integration**: Add the AppLovin Helper Addon to your project by going to **Superfine** > **Add ons** > **AppLovin**.
 - **Event Registration**: Begin logging revenue and impressions by calling `SuperfineSDKApplovin.RegisterPaidEvent()`. When you're done, turn it off with `SuperfineSDKApplovin.UnregisterPaidEvent()` or when your manager class is destroyed.
 
 #### Appodeal Addons Helper Class
-- **Integration**: Add the Appodeal Helper Addons to your project by going to the 
+- **Integration**: Add the Appodeal Helper Addons to your project by going to: 
     - **Superfine** > **Add ons** > **Appodeal (UMP)** (for the UMP version).
     - **Superfine** > **Add ons** > **Appodeal (Manual)** (for the Manual version).
 - **Event Registration**: Begin logging revenue and impressions by calling `SuperfineSDKAppodeal.RegisterPaidEvent()`. When you're done, turn it off with `SuperfineSDKAppodeal.UnregisterPaidEvent()` or when your manager class is destroyed.
 
 #### IronSource Addons Helper Class
-- **Integration**: Add the Ironsource Helper Addons to your project by going to the **Superfine** > **Add ons** > **IronSource**.
+- **Integration**: Add the Ironsource Helper Addon to your project by going to **Superfine** > **Add ons** > **IronSource**.
 - **Event Registration**: Begin logging revenue and impressions with `SuperfineSDKIronSource.RegisterPaidEvent()`. Turn it off with `SuperfineSDKIronSource.UnregisterPaidEvent()` when done or when your manager class is removed.
 
 #### Google AdMob Addon Helper Class
-- **Integration**: Add the Admob Helper Addons to your project by going to the **Superfine** > **Add ons** > **Admob**.
--**Event Registration**: For Google Admob you have to register events for all placement that you have.
+- **Integration**: Add the Admob Helper Addon to your project by going to **Superfine** > **Add ons** > **Admob**.
+-**Event Registration**: For Google AdMob, you have to register events for all placements that you have.
     - For Banner: `SuperfineSDKAdMob.RegisterBannerViewPaidEvent(bannerView, adUnitId)` and `SuperfineSDKAdMob.UnregisterBannerViewPaidEvent(bannerView, adUnitId)`.
     - For Interstitial: `SuperfineSDKAdMob.RegisterInterstitialAdPaidEvent(interstitialAd, adUnitId)` and `SuperfineSDKAdMob.UnregisterInterstitialAdPaidEvent(interstitialAd, adUnitId)`.
     - For Rewarded video ad:  `SuperfineSDKAdMob.RegisterRewardedAdPaidEvent(rewardedAd, adUnitId)` and `SuperfineSDKAdMob.UnregisterRewardedAdPaidEvent(rewardedAd, adUnitId)`.
@@ -326,7 +328,7 @@ We offer ad revenue reporting support through our addon classes. Automatically r
 ### Facebook Events Addon Helper Class
 The SuperfineSDKFacebook class simplifies sending events to Facebook for marketing purposes. To smoothly integrate this feature, follow these steps:
 - **Integration**: 
-    - Add the Facebook Addon to your project by going to the **Superfine** > **Add ons** > **Facebook**
+    - Add the Facebook Addon to your project by going to **Superfine** > **Add ons** > **Facebook**
     - After initializing the Facebook SDK, call `SuperfineSDKFacebook.OnFacebookInitialized();`
 - **Event Registration**: Begin logging events with `SuperfineSDKFacebook.RegisterSendEvent()`. When done, turn it off using `SuperfineSDKFacebook.UnregisterSendEvent()` or when your manager class is removed.
 
