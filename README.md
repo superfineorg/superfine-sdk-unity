@@ -363,7 +363,27 @@ The SuperfineSDKFacebook class simplifies sending events to Facebook for marketi
 
 By following these instructions, you can effectively utilize the SuperfineSDKFacebook class to transmit custom events to Facebook, enhancing marketing insights and decision-making for your app.
 
-## 2.7 Postback Conversion Value for iOS
+## 2.7 Modules
+### Appsflyer
+The SuperfineSDKAppsFlyerModule helps connect Appsflyer MMP to Superfine. To integrate this feature smoothly, follow these steps:
+
+- Make sure you have installed Appsflyer in your project.
+- Add the Appsflyer Module by navigating to **Superfine > Modules > AppsFlyer**.
+
+![image_1]
+
+- Open SuperfineSDK settings by going to the menu **Superfine > Edit Settings** or by navigating to the folder: **SuperfineSDK > Resources > SuperfineSettings**.
+- Drag SuperfineAppsFlyerSettings into **SuperfineSettings > Modules**.
+
+![image_2]
+
+- Update SuperfineAppsFlyerSettings by going to the file: **SuperfineSDK > Modules > AppsFlyer > SuperfineAppsFlyerSettings**.
+    - Update your AppsFlyer's Dev key.
+    - Enable auto-start if you want Superfine to initialize the AppsFlyer for you. Turn it off if you prefer to start it manually.
+
+![image_3]
+
+## 2.8 Postback Conversion Value for iOS
 The method allows you to update both the conversion value and coarse conversion values, and it provides the option to send the postback before the conversion window ends. Additionally, it allows you to specify a completion handler to handle situations where the update fails.
 
 ```csharp
@@ -378,3 +398,6 @@ SuperfineSDK.UpdatePostbackConversionValue(8, "low");
 // Example 3: Usage with lockWindow
 SuperfineSDK.UpdatePostbackConversionValue(15, "medium", true);
 ```
+[image_1]: ./assets/unity/1.png
+[image_2]: ./assets/unity/2.png
+[image_3]: ./assets/unity/3.png
