@@ -380,6 +380,7 @@ The SuperfineSDKAppsFlyerModule helps connect Appsflyer MMP to Superfine. To int
 - Update SuperfineAppsFlyerSettings by going to the file: **SuperfineSDK > Modules > AppsFlyer > SuperfineAppsFlyerSettings**.
     - Update your AppsFlyer's Dev key.
     - Enable auto-start if you want Superfine to initialize the AppsFlyer for you. Turn it off if you prefer to start it manually.
+    - Enable "Send Log" if you wish to pass log events to Appsflyer.
 
 ![image_3]
 
