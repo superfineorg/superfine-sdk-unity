@@ -65,7 +65,6 @@ public class SampleScene : MonoBehaviour
     public TextMeshProUGUI storeTypeText;
 
     public TextMeshProUGUI deepLinkUrlText;
-    public TextMeshProUGUI pushTokenText;
 
     public Toggle autoStartToggle;
 
@@ -125,12 +124,13 @@ public class SampleScene : MonoBehaviour
 #endif
 
         SuperfineSDKSettings settings = SuperfineSDKSettings.LoadFromResources().Clone();
-        settings.AddModuleSettings<SampleModuleSettings>();
+        settings.autoStart = false;
 
-        offline = settings.offline;
-        offlineToggle.isOn = offline;
+        // Initialize SuperfineSDK.
+        SuperfineSDK.Initialize(settings, OnInitialized);
 
-        SuperfineSDK.CreateInstance(settings);
+        // Note: Call Unity.SuperfineSDK.Start(); after MMP and Mediation SDK initialization.
+        SuperfineSDK.Start();
 
         SuperfineSDKFacebook.RegisterSendEvent();
 
@@ -140,8 +140,7 @@ public class SampleScene : MonoBehaviour
         SuperfineSDK.AddPauseCallback(OnPauseSDK);
         SuperfineSDK.AddResumeCallback(OnResumeSDK);
 
-        SuperfineSDK.AddDeepLinkCallback(OnSetDeepLink, true);
-        SuperfineSDK.AddPushTokenCallback(OnSetPushToken, true);
+        SuperfineSDK.AddDeepLinkCallback(OnSetDeepLink);
 
         userIdText.text = StandardizeInfoText(SuperfineSDK.GetUserId(), "USER ID");
 
@@ -177,6 +176,11 @@ public class SampleScene : MonoBehaviour
     }
 #endif
 
+    public void OnInitialized()
+    {
+
+    }
+
     public void OnOfflineStatusChanged(bool value)
     {
         if (value == offline) return;
@@ -187,21 +191,7 @@ public class SampleScene : MonoBehaviour
 
     public void TestStart()
     {
-        if (Application.platform == RuntimePlatform.IPhonePlayer)
-        {
-            SuperfineSDK.RequestTrackingAuthorization((AuthorizationTrackingStatus status) =>
-            {
-                Debug.Log("Authorization Tracking Status = " + status.ToString());
-
-                //SuperfineSDK.UpdatePostbackConversionValue(10, "medium", true);
-
-                StartTracking();
-            });
-        }
-        else
-        {
-            StartTracking();
-        }
+        StartTracking();
     }
 
     public void TestStop()
@@ -291,11 +281,6 @@ public class SampleScene : MonoBehaviour
     private void OnSetDeepLink(string url)
     {
         deepLinkUrlText.text = StandardizeInfoText(url, "DEEP LINK");
-    }
-
-    private void OnSetPushToken(string token)
-    {
-        pushTokenText.text = StandardizeInfoText(token, "PUSH TOKEN");
     }
 
     private void StartTracking()
